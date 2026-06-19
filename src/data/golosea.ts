@@ -111,6 +111,22 @@ export const fonts = {
   body:    "Nunito",
 } as const;
 
+export const images = {
+  hero: {
+    url: "https://images.pexels.com/photos/65547/pexels-photo-65547.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    alt: "Grageas de chocolate de colores",
+  },
+  about: {
+    url: "https://images.pexels.com/photos/7474230/pexels-photo-7474230.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    alt: "Decorando dulces con virutas de colores",
+  },
+  gallery: [
+    { url: "https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Brownies de chocolate" },
+    { url: "https://images.pexels.com/photos/3625372/pexels-photo-3625372.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Batido rosa de fresa" },
+    { url: "https://images.pexels.com/photos/7474270/pexels-photo-7474270.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Merengues artesanos" },
+  ],
+} as const;
+
 // Used as the chatbot system-prompt knowledge base.
 export const chatbotFacts = [
   "Golosea es una tienda de golosinas y chucherias en El Bonillo, Albacete (Plaza Cementerio 9).",
