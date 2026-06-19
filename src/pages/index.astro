@@ -1,17 +1,461 @@
 ---
-
+import Layout from "../layouts/Layout.astro";
+import { content, business, palette } from "../data/golosea";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero__inner">
+      <p class="hero__tagline">{content.tagline}</p>
+      <h1 class="hero__headline">{content.hero_headline}</h1>
+      <p class="hero__subtext">{content.hero_subtext}</p>
+      <div class="hero__actions">
+        <a
+          href={`https://wa.me/${business.whatsapp}?text=Hola%2C%20me%20gustaría%20pedir%20información`}
+          class="btn btn--primary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {content.cta_text} 🍬
+        </a>
+        <a href={`tel:${business.phone.replace(/\s/g, "")}`} class="btn btn--outline">
+          {business.phone}
+        </a>
+      </div>
+    </div>
+    <div class="hero__emoji-strip" aria-hidden="true">
+      🍬 🍫 🎉 🍭 🥤 🧁 🍬 🍫 🎉 🍭 🥤 🧁
+    </div>
+  </header>
+
+  <!-- SERVICIOS -->
+  <section class="section" id="servicios">
+    <div class="container">
+      <h2 class="section__title">Lo que encontrarás en Golosea</h2>
+      <div class="services-grid">
+        {content.services.map((s) => (
+          <div class="service-card">
+            <span class="service-card__emoji">{s.emoji}</span>
+            <h3 class="service-card__title">{s.title}</h3>
+            <p class="service-card__desc">{s.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE NOSOTROS -->
+  <section class="section section--accent" id="nosotros">
+    <div class="container about">
+      <div class="about__text">
+        <h2 class="section__title">{content.about_title}</h2>
+        <p>{content.about_text}</p>
+        <a
+          href={`https://wa.me/${business.whatsapp}?text=Hola%2C%20quiero%20hacer%20un%20encargo`}
+          class="btn btn--primary"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="margin-top: 1.5rem; display: inline-block;"
+        >
+          Hacer un encargo
+        </a>
+      </div>
+      <div class="about__badges">
+        <div class="badge">
+          <span class="badge__num">{business.rating}</span>
+          <span class="badge__label">Valoración ⭐</span>
+        </div>
+        <div class="badge">
+          <span class="badge__num">{business.ratingsCount}+</span>
+          <span class="badge__label">Reseñas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POR QUÉ ELEGIRNOS -->
+  <section class="section" id="por-que">
+    <div class="container">
+      <h2 class="section__title">Por qué elegir Golosea</h2>
+      <div class="why-grid">
+        {content.why_choose.map((w) => (
+          <div class="why-card">
+            <span class="why-card__emoji">{w.emoji}</span>
+            <h3>{w.title}</h3>
+            <p>{w.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIOS -->
+  <section class="section section--dark" id="opiniones">
+    <div class="container">
+      <h2 class="section__title section__title--light">Lo que dicen nuestros clientes</h2>
+      <div class="testimonials-grid">
+        {content.testimonials.map((t) => (
+          <blockquote class="testimonial">
+            <p class="testimonial__text">"{t.text}"</p>
+            <footer class="testimonial__author">— {t.name}</footer>
+          </blockquote>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="section" id="contacto">
+    <div class="container contact">
+      <div>
+        <h2 class="section__title">Ven a vernos</h2>
+        <p class="contact__address">📍 {business.address}</p>
+        <p class="contact__phone">📞 <a href={`tel:${business.phone.replace(/\s/g, "")}`}>{business.phone}</a></p>
+        <p class="contact__hours">🕐 Martes a domingo, mañana y tarde · Lunes cerrado</p>
+        <div class="contact__actions">
+          <a
+            href={`https://wa.me/${business.whatsapp}?text=Hola%2C%20quiero%20información%20sobre%20vuestros%20productos`}
+            class="btn btn--primary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            WhatsApp 💬
+          </a>
+          <a
+            href={`https://maps.google.com/?q=${encodeURIComponent(business.address)}`}
+            class="btn btn--outline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Cómo llegar 🗺️
+          </a>
+        </div>
+      </div>
+      <div class="contact__map">
+        <iframe
+          src={business.mapsEmbed}
+          width="100%"
+          height="300"
+          style="border:0; border-radius: 1rem;"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Ubicación de Golosea en Google Maps"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2025 Golosea · {business.address} · {business.phone}</p>
+  </footer>
+</Layout>
+
+<style>
+  /* ── Layout helpers ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .section {
+    padding: 5rem 0;
+  }
+
+  .section--accent {
+    background-color: color-mix(in srgb, var(--color-accent) 12%, white);
+  }
+
+  .section--dark {
+    background-color: var(--color-dark);
+  }
+
+  .section__title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: var(--color-primary);
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  .section__title--light {
+    color: var(--color-accent);
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.8rem 1.8rem;
+    border-radius: 2rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    text-decoration: none;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn--primary {
+    background-color: var(--color-primary);
+    color: #fff;
+  }
+
+  .btn--outline {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--color-light) 60%, color-mix(in srgb, var(--color-primary) 10%, white));
+    padding: 5rem 1.5rem 0;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero__inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .hero__tagline {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+  }
+
+  .hero__headline {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    color: var(--color-primary);
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero__subtext {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--color-dark);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    opacity: 0.85;
+  }
+
+  .hero__actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .hero__emoji-strip {
+    font-size: 2rem;
+    white-space: nowrap;
+    opacity: 0.35;
+    padding: 1rem 0;
+    letter-spacing: 0.5rem;
+  }
+
+  /* ── SERVICES ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .service-card {
+    background: #fff;
+    border: 2px solid color-mix(in srgb, var(--color-primary) 12%, white);
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .service-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-4px);
+  }
+
+  .service-card__emoji {
+    font-size: 2.4rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .service-card__title {
+    font-size: 1.15rem;
+    color: var(--color-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .service-card__desc {
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--color-dark) 70%, white);
+    line-height: 1.5;
+  }
+
+  /* ── ABOUT ── */
+  .about {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .about__text p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-dark);
+  }
+
+  .about__badges {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .badge {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 1.25rem 2rem;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(232, 51, 109, 0.12);
+    min-width: 130px;
+  }
+
+  .badge__num {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--color-primary);
+  }
+
+  .badge__label {
+    font-size: 0.85rem;
+    color: var(--color-dark);
+    opacity: 0.7;
+  }
+
+  /* ── WHY ── */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .why-card {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    background: var(--color-light);
+    border-radius: 1rem;
+  }
+
+  .why-card__emoji {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .why-card h3 {
+    font-size: 1.1rem;
+    color: var(--color-dark);
+    margin-bottom: 0.4rem;
+  }
+
+  .why-card p {
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--color-dark) 70%, white);
+  }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .testimonial {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1rem;
+    padding: 1.75rem;
+  }
+
+  .testimonial__text {
+    font-size: 1rem;
+    color: #fff;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  .testimonial__author {
+    font-size: 0.875rem;
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  /* ── CONTACT ── */
+  .contact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .contact__address,
+  .contact__phone,
+  .contact__hours {
+    font-size: 1rem;
+    color: var(--color-dark);
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .contact__phone a {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .contact__actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.75rem;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    background-color: var(--color-dark);
+    color: rgba(255, 255, 255, 0.55);
+    text-align: center;
+    padding: 1.75rem 1.5rem;
+    font-size: 0.85rem;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .about,
+    .contact {
+      grid-template-columns: 1fr;
+    }
+
+    .about__badges {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+</style>
