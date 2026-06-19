@@ -100,10 +100,10 @@ export const content = {
 } as const;
 
 export const palette = {
-  primary: "#E8336D",
-  accent:  "#FFB703",
-  dark:    "#3A1E3E",
-  light:   "#FFF5F8",
+  primary: "#E8455A", // rojo sandia/fresa (no hiper intenso)
+  accent:  "#2FA84F", // verde fresco de sandia
+  dark:    "#1C4532", // verde corteza profundo (secciones oscuras y texto)
+  light:   "#FFF6F5", // blanco calido
 } as const;
 
 export const fonts = {
@@ -126,6 +126,59 @@ export const images = {
     { url: "https://images.pexels.com/photos/7474270/pexels-photo-7474270.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Merengues artesanos" },
   ],
 } as const;
+
+// Slides del hero animado: cada producto sobre su color, con sus 2 ingredientes.
+export const heroSlides = [
+  {
+    key: "sandia",
+    label: "Sandía",
+    accent: "#ffd2d8",
+    // rojo
+    bg: "radial-gradient(120% 120% at 70% 15%, #f0566b 0%, #d62744 45%, #a4122e 100%)",
+    product: { src: "/hero/sandia-chuche.webp", alt: "Gominola de sandía azucarada" },
+    ingredients: [
+      { src: "/hero/sandia-entera.webp", alt: "Sandía entera" },
+      { src: "/hero/sandia-trozo.webp", alt: "Trozo de sandía" },
+    ],
+  },
+  {
+    key: "pistacho",
+    label: "Pistacho",
+    accent: "#dff3c9",
+    // verde
+    bg: "radial-gradient(120% 120% at 70% 15%, #5bbf6e 0%, #2f9c52 45%, #16723a 100%)",
+    product: { src: "/hero/pistacho-tarrina.webp", alt: "Tarrina de helado de pistacho" },
+    ingredients: [
+      { src: "/hero/pistacho-frutos.webp", alt: "Pistachos" },
+      { src: "/hero/pistacho-bola.webp", alt: "Bola de helado de pistacho" },
+    ],
+  },
+  {
+    key: "patata",
+    label: "Patatas",
+    accent: "#fff3c4",
+    // amarillo
+    bg: "radial-gradient(120% 120% at 70% 15%, #ffd54a 0%, #f6b821 45%, #d68f00 100%)",
+    product: { src: "/hero/patata-bote.webp", alt: "Bote de patatas gourmet" },
+    ingredients: [
+      { src: "/hero/patata-cruda.webp", alt: "Patata cruda" },
+      { src: "/hero/patata-cebolla.webp", alt: "Cebolla y cebollino" },
+    ],
+  },
+  {
+    key: "cola",
+    label: "Refresco",
+    accent: "#ead7c4",
+    // oscurito marrón/blanco con blur
+    bg: "radial-gradient(120% 120% at 70% 10%, #6b4a39 0%, #3a2820 50%, #1c130e 100%)",
+    blur: true,
+    product: { src: "/hero/cola-lata.webp", alt: "Lata de refresco con splash de cola" },
+    ingredients: [
+      { src: "/hero/cola-lima.webp", alt: "Lima" },
+      { src: "/hero/cola-hielo.webp", alt: "Cubitos de hielo" },
+    ],
+  },
+] as const;
 
 // Used as the chatbot system-prompt knowledge base.
 export const chatbotFacts = [

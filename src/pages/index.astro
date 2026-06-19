@@ -7,34 +7,50 @@
 // - /blog        → Novedades, temporadas, recetas con chucherías
 
 import Layout from "../layouts/Layout.astro";
-import { content, business, images } from "../data/golosea";
+import { content, business, images, heroSlides } from "../data/golosea";
 ---
 
 <Layout>
 
   <!-- ═══════════════════════════════════════════
-       HERO — imagen de fondo con overlay oscuro
+       HERO — slideshow de productos que rota solo
   ═══════════════════════════════════════════ -->
-  <section
-    class="hero"
-    style={`background-image: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('${images.hero.url}')`}
-  >
-    <p class="tagline">{content.tagline}</p>
-    <h1>{content.hero_headline}</h1>
-    <p class="subtext">{content.hero_subtext}</p>
-    <div class="hero-actions">
-      <a
-        href="#contacto"
-        class="btn"
-      >
-        {content.cta_text} 🍬
-      </a>
-      <a
-        href={`tel:${business.phone.replace(/\s/g, "")}`}
-        class="btn btn-outline"
-      >
-        📞 {business.phone}
-      </a>
+  <section class="hero" id="hero">
+    <!-- capas de fondo (una por producto, cambian de color) -->
+    <div class="hero-bgs">
+      {heroSlides.map((s, i) => (
+        <div
+          class:list={["hero-bg", { blur: (s as any).blur }]}
+          style={`background: ${s.bg}`}
+        />
+      ))}
+    </div>
+
+    <!-- escenario: ingredientes + producto flotando (uno por slide) -->
+    <div class="hero-stage" aria-hidden="true">
+      {heroSlides.map((s, i) => (
+        <div class="stage">
+          <img class="ing ing-1" src={s.ingredients[0].src} alt={s.ingredients[0].alt} loading={i === 0 ? "eager" : "lazy"} />
+          <img class="ing ing-2" src={s.ingredients[1].src} alt={s.ingredients[1].alt} loading={i === 0 ? "eager" : "lazy"} />
+          <img class="product" src={s.product.src} alt={s.product.alt} loading={i === 0 ? "eager" : "lazy"} />
+        </div>
+      ))}
+    </div>
+
+    <!-- contenido fijo encima -->
+    <div class="hero-content">
+      <p class="tagline">{content.tagline}</p>
+      <h1>{content.hero_headline}</h1>
+      <p class="subtext">{content.hero_subtext}</p>
+      <div class="hero-actions">
+        <a href="#contacto" class="btn">{content.cta_text} 🍬</a>
+        <a href={`tel:${business.phone.replace(/\s/g, "")}`} class="btn btn-outline">📞 {business.phone}</a>
+      </div>
+      <div class="hero-dots" aria-hidden="true">
+        {heroSlides.map((s) => (
+          <span class="dot"><span>{s.label}</span></span>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -241,43 +257,226 @@ import { content, business, images } from "../data/golosea";
     color: #fff;
   }
 
-  /* ── HERO ── */
+  /* ── HERO (slideshow) ── */
   .hero {
+    position: relative;
+    overflow: hidden;
+    min-height: min(92vh, 820px);
+    display: flex;
+    align-items: center;
     color: #fff;
-    text-align: center;
-    padding: 120px 1.25rem 90px;
-    background-size: cover;
-    background-position: center;
+    isolation: isolate;
+  }
+
+  /* capas de color que rotan */
+  .hero-bgs { position: absolute; inset: 0; z-index: 0; }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    animation: slideFade 12s linear infinite;
+  }
+
+  /* cada capa entra 3s desfasada (4 x 3s = 12s) */
+  .hero-bgs > .hero-bg:nth-child(1) { animation-delay: 0s; }
+  .hero-bgs > .hero-bg:nth-child(2) { animation-delay: -9s; }
+  .hero-bgs > .hero-bg:nth-child(3) { animation-delay: -6s; }
+  .hero-bgs > .hero-bg:nth-child(4) { animation-delay: -3s; }
+
+  /* refresco: fondo oscuro con halo difuminado */
+  .hero-bg.blur::after {
+    content: "";
+    position: absolute;
+    inset: -12%;
+    background: inherit;
+    filter: blur(64px) saturate(1.1);
+    opacity: 0.65;
+  }
+
+  /* scrim para legibilidad del texto */
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.58) 0%,
+      rgba(0, 0, 0, 0.32) 40%,
+      rgba(0, 0, 0, 0) 68%
+    );
+  }
+
+  /* escenario de imagenes (a la derecha) */
+  .hero-stage {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 52%;
+  }
+
+  .stage {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    animation: stagePop 12s linear infinite;
+  }
+
+  .hero-stage > .stage:nth-child(1) { animation-delay: 0s; }
+  .hero-stage > .stage:nth-child(2) { animation-delay: -9s; }
+  .hero-stage > .stage:nth-child(3) { animation-delay: -6s; }
+  .hero-stage > .stage:nth-child(4) { animation-delay: -3s; }
+
+  .product {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    max-height: 76%;
+    max-width: 82%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 26px 32px rgba(0, 0, 0, 0.42));
+  }
+
+  .ing {
+    position: absolute;
+    width: clamp(104px, 14vw, 178px);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.4));
+  }
+
+  .ing-1 { top: 9%; right: 4%; transform: rotate(6deg); }
+  .ing-2 { bottom: 8%; left: 1%; transform: rotate(-7deg); }
+
+  /* ── animaciones del slideshow (CSS puro, sin JS — inmune al throttling de timers) ── */
+  @keyframes slideFade {
+    0%   { opacity: 1; }
+    21%  { opacity: 1; }
+    25%  { opacity: 0; }
+    96%  { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes stagePop {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    21%  { opacity: 1; transform: translateY(0) scale(1); }
+    25%  { opacity: 0; transform: translateY(0) scale(1); }
+    96%  { opacity: 0; transform: translateY(30px) scale(0.94); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes dotActive {
+    0%   { background: #fff; color: var(--color-dark); }
+    21%  { background: #fff; color: var(--color-dark); }
+    25%  { background: rgba(255, 255, 255, 0.18); color: #fff; }
+    96%  { background: rgba(255, 255, 255, 0.18); color: #fff; }
+    100% { background: #fff; color: var(--color-dark); }
+  }
+
+  /* contenido fijo encima */
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  .hero-content .tagline,
+  .hero-content h1,
+  .hero-content .subtext {
+    max-width: 540px;
   }
 
   .tagline {
     text-transform: uppercase;
     letter-spacing: 2px;
-    font-size: 0.8rem;
-    color: var(--color-accent);
-    font-weight: 600;
+    font-size: 0.82rem;
+    color: #fff;
+    opacity: 0.85;
+    font-weight: 700;
     margin-bottom: 12px;
   }
 
   .hero h1 {
     font-size: clamp(2rem, 5vw, 3.4rem);
-    max-width: 800px;
-    margin: 0 auto 18px;
+    margin: 0 0 18px;
     color: #fff;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
   }
 
   .subtext {
     font-size: 1.15rem;
-    max-width: 600px;
-    margin: 0 auto 30px;
+    margin: 0 0 30px;
     opacity: 0.95;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
   }
 
   .hero-actions {
     display: flex;
     gap: 14px;
-    justify-content: center;
     flex-wrap: wrap;
+  }
+
+  /* indicadores / selector de seccion */
+  .hero-dots {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+
+  .dot {
+    display: inline-block;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 7px 15px;
+    backdrop-filter: blur(4px);
+    animation: dotActive 12s linear infinite;
+  }
+
+  .hero-dots > .dot:nth-child(1) { animation-delay: 0s; }
+  .hero-dots > .dot:nth-child(2) { animation-delay: -9s; }
+  .hero-dots > .dot:nth-child(3) { animation-delay: -6s; }
+  .hero-dots > .dot:nth-child(4) { animation-delay: -3s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* mantiene la rotacion (crossfade) pero sin el "pop" de entrada */
+    .stage { animation-name: slideFade; }
+  }
+
+  @media (max-width: 860px) {
+    .hero {
+      min-height: 86vh;
+      align-items: flex-end;
+      padding-bottom: 42px;
+    }
+    .hero::before {
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.15) 0%,
+        rgba(0, 0, 0, 0.3) 45%,
+        rgba(0, 0, 0, 0.62) 100%
+      );
+    }
+    .hero-stage { width: 100%; }
+    .product { max-height: 52%; top: 34%; }
+    .ing { width: 82px; }
+    .ing-1 { top: 5%; right: 6%; }
+    .ing-2 { top: 27%; left: 4%; bottom: auto; }
+    .hero-content .tagline,
+    .hero-content h1,
+    .hero-content .subtext { max-width: 100%; }
   }
 
   /* ── SERVICIOS ── */
@@ -551,10 +750,6 @@ import { content, business, images } from "../data/golosea";
 
     .gallery-grid img {
       height: 220px;
-    }
-
-    .hero {
-      padding: 90px 1.25rem 70px;
     }
   }
 </style>
