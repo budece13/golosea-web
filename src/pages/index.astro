@@ -390,43 +390,50 @@ import { content, business, images, heroSlides } from "../data/golosea";
   .hero-stage > .product:nth-child(3) { animation-delay: -6s; }
   .hero-stage > .product:nth-child(4) { animation-delay: -3s; }
 
-  /* ── animaciones (CSS puro, sin JS) ── */
+  /* ── animaciones coordinadas ──
+     Ventana comun: SALIDA 20%→25% (acelerando), ENTRADA 95%→100% (frenando).
+     Asi, en cada cambio de seccion, lo que sale y lo que entra coinciden en el tiempo. */
   @keyframes slideFade {
     0%   { opacity: 1; }
-    21%  { opacity: 1; }
+    20%  { opacity: 1; }
     25%  { opacity: 0; }
-    96%  { opacity: 0; }
+    95%  { opacity: 0; }
     100% { opacity: 1; }
   }
   /* titulo: sube y desaparece al salir; cae desde arriba y asienta con squash (3s = 1 seccion) */
   @keyframes titleCycle {
-    0%   { opacity: 1; transform: translateY(0) scaleY(1); }
-    75%  { opacity: 1; transform: translateY(0) scaleY(1); }
-    82%  { opacity: 0; transform: translateY(-46px) scaleY(1.05); }
-    83%  { opacity: 0; transform: translateY(-82px) scaleY(0.95); }
-    93%  { opacity: 1; transform: translateY(0) scaleY(0.82); }
-    97%  { opacity: 1; transform: translateY(0) scaleY(1.07); }
-    100% { opacity: 1; transform: translateY(0) scaleY(1); }
+    0%    { opacity: 1; transform: translateY(0) scaleY(1); }
+    80%   { opacity: 1; transform: translateY(0) scaleY(1); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.4); }
+    88%   { opacity: 0; transform: translateY(-46px) scaleY(1.05); }
+    89%   { opacity: 0; transform: translateY(-82px) scaleY(0.95); animation-timing-function: cubic-bezier(0.18, 0.72, 0.3, 1); }
+    97%   { opacity: 1; transform: translateY(0) scaleY(0.82); }
+    98.5% { opacity: 1; transform: translateY(0) scaleY(1.07); }
+    100%  { opacity: 1; transform: translateY(0) scaleY(1); }
   }
-  /* producto: sale antihorario hacia arriba; entra rapido, ladeado horario, y se centra */
+  /* producto: sale antihorario hacia arriba; entra ladeado horario y se centra */
   @keyframes productSpin {
     0%   { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
-    20%  { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+    20%  { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.4); }
     25%  { opacity: 0; transform: translate(-50%, calc(-50% - 95px)) rotate(-20deg); }
-    93%  { opacity: 0; transform: translate(-50%, calc(-50% - 175px)) rotate(20deg); }
-    94%  {
+    94%  { opacity: 0; transform: translate(-50%, calc(-50% - 175px)) rotate(20deg); }
+    95%  {
       opacity: 0;
       transform: translate(-50%, calc(-50% - 175px)) rotate(20deg);
       animation-timing-function: cubic-bezier(0.18, 0.72, 0.3, 1);
     }
     100% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
   }
-  /* ingredientes de fondo: entran desde arriba, salen hacia arriba (sin girar) */
+  /* ingredientes de fondo: misma ventana que el producto (entran/salen a la vez), sin girar */
   @keyframes decorMove {
     0%   { opacity: 1; transform: translateY(0); }
-    21%  { opacity: 1; transform: translateY(0); }
-    25%  { opacity: 0; transform: translateY(-55px); }
-    90%  { opacity: 0; transform: translateY(-90px); }
+    20%  { opacity: 1; transform: translateY(0); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.4); }
+    25%  { opacity: 0; transform: translateY(-70px); }
+    94%  { opacity: 0; transform: translateY(-110px); }
+    95%  {
+      opacity: 0;
+      transform: translateY(-110px);
+      animation-timing-function: cubic-bezier(0.18, 0.72, 0.3, 1);
+    }
     100% { opacity: 1; transform: translateY(0); }
   }
   /* ── eyebrow (condensed bold) ── */
