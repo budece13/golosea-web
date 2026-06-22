@@ -26,32 +26,42 @@ import { content, business, images, heroSlides } from "../data/golosea";
       ))}
     </div>
 
-    <!-- escenario: ingredientes + producto flotando (uno por slide) -->
-    <div class="hero-stage" aria-hidden="true">
+    <!-- ingredientes de fondo (detras del titulo; 5 por slide, con profundidad) -->
+    <div class="hero-decor" aria-hidden="true">
       {heroSlides.map((s, i) => (
-        <div class="stage">
-          <img class="ing ing-1" src={s.ingredients[0].src} alt={s.ingredients[0].alt} loading={i === 0 ? "eager" : "lazy"} />
-          <img class="ing ing-2" src={s.ingredients[1].src} alt={s.ingredients[1].alt} loading={i === 0 ? "eager" : "lazy"} />
-          <img class="product" src={s.product.src} alt={s.product.alt} loading={i === 0 ? "eager" : "lazy"} />
+        <div class="decor">
+          {[1, 0, 0, 1, 1].map((idx) => (
+            <img class="ding" src={s.ingredients[idx].src} alt="" loading={i === 0 ? "eager" : "lazy"} />
+          ))}
         </div>
       ))}
     </div>
 
-    <!-- contenido fijo encima -->
-    <div class="hero-content">
-      <p class="tagline">{content.tagline}</p>
-      <h1>{content.hero_headline}</h1>
+    <!-- titulo (Permanent Marker; rise-out / drop-in por seccion) -->
+    <h1 class="hero-title">
+      <span class="tl">Dulces que alegran</span>{" "}
+      <span class="tl">tu día</span>
+    </h1>
+
+    <!-- producto central (delante del titulo), uno por slide -->
+    <div class="hero-stage" aria-hidden="true">
+      {heroSlides.map((s, i) => (
+        <img class="product" src={s.product.src} alt={s.product.alt} loading={i === 0 ? "eager" : "lazy"} />
+      ))}
+    </div>
+
+    <!-- eyebrow arriba a la izquierda -->
+    <p class="hero-eyebrow">El Bonillo</p>
+
+    <!-- pie fijo: parrafo + CTAs -->
+    <div class="hero-foot">
       <p class="subtext">{content.hero_subtext}</p>
       <div class="hero-actions">
         <a href="#contacto" class="btn">{content.cta_text} 🍬</a>
         <a href={`tel:${business.phone.replace(/\s/g, "")}`} class="btn btn-outline">📞 {business.phone}</a>
       </div>
-      <div class="hero-dots" aria-hidden="true">
-        {heroSlides.map((s) => (
-          <span class="dot"><span>{s.label}</span></span>
-        ))}
-      </div>
     </div>
+
   </section>
 
   <!-- ═══════════════════════════════════════════
@@ -257,13 +267,11 @@ import { content, business, images, heroSlides } from "../data/golosea";
     color: #fff;
   }
 
-  /* ── HERO (slideshow) ── */
+  /* ── HERO (poster slideshow) ── */
   .hero {
     position: relative;
     overflow: hidden;
-    min-height: min(92vh, 820px);
-    display: flex;
-    align-items: center;
+    min-height: min(94vh, 880px);
     color: #fff;
     isolation: isolate;
   }
@@ -294,7 +302,7 @@ import { content, business, images, heroSlides } from "../data/golosea";
     opacity: 0.65;
   }
 
-  /* scrim para legibilidad del texto */
+  /* vignette suave para legibilidad sobre cualquier color (z1) */
   .hero::before {
     content: "";
     position: absolute;
@@ -302,60 +310,87 @@ import { content, business, images, heroSlides } from "../data/golosea";
     z-index: 1;
     pointer-events: none;
     background: linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.58) 0%,
-      rgba(0, 0, 0, 0.32) 40%,
-      rgba(0, 0, 0, 0) 68%
+      180deg,
+      rgba(0, 0, 0, 0.18) 0%,
+      rgba(0, 0, 0, 0) 26%,
+      rgba(0, 0, 0, 0) 58%,
+      rgba(0, 0, 0, 0.34) 100%
     );
   }
 
-  /* escenario de imagenes (a la derecha) */
-  .hero-stage {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 52%;
-  }
+  /* ── ingredientes de fondo (z2, DETRAS del titulo; 5 por slide con profundidad) ── */
+  .hero-decor { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
 
-  .stage {
+  .decor {
     position: absolute;
     inset: 0;
     opacity: 0;
+    animation: decorMove 12s linear infinite;
+  }
+  .hero-decor > .decor:nth-child(1) { animation-delay: 0s; }
+  .hero-decor > .decor:nth-child(2) { animation-delay: -9s; }
+  .hero-decor > .decor:nth-child(3) { animation-delay: -6s; }
+  .hero-decor > .decor:nth-child(4) { animation-delay: -3s; }
+
+  .ding {
+    position: absolute;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.3));
+  }
+  /* dispersos: unos nitidos, otros con blur (profundidad de campo) */
+  .ding:nth-child(1) { width: clamp(150px, 19vw, 270px); top: 6%;  left: 3%;  transform: rotate(-12deg); filter: blur(4px); opacity: 0.78; }
+  .ding:nth-child(2) { width: clamp(120px, 15vw, 210px); top: 9%;  right: 5%; transform: rotate(9deg); }
+  .ding:nth-child(3) { width: clamp(95px, 11vw, 150px);  top: 41%; left: 1%;  transform: rotate(14deg); filter: blur(3px); opacity: 0.82; }
+  .ding:nth-child(4) { width: clamp(140px, 17vw, 240px); bottom: 6%; right: 4%; transform: rotate(-8deg); }
+  .ding:nth-child(5) { width: clamp(110px, 13vw, 180px); bottom: 7%; left: 6%; transform: rotate(6deg); filter: blur(5px); opacity: 0.7; }
+
+  /* ── titulo (z3, Permanent Marker) ── */
+  .hero-title {
+    position: absolute;
+    z-index: 3;
+    top: 19%;
+    left: clamp(1.25rem, 5vw, 5rem);
+    margin: 0;
+    font-family: "Titan One", var(--font-heading);
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 0.96;
+    letter-spacing: 0.005em;
+    font-size: clamp(2.7rem, 8vw, 7rem);
+    color: #fff;
+    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.32);
     pointer-events: none;
-    animation: stagePop 12s linear infinite;
   }
 
-  .hero-stage > .stage:nth-child(1) { animation-delay: 0s; }
-  .hero-stage > .stage:nth-child(2) { animation-delay: -9s; }
-  .hero-stage > .stage:nth-child(3) { animation-delay: -6s; }
-  .hero-stage > .stage:nth-child(4) { animation-delay: -3s; }
+  .tl {
+    display: block;
+    transform-origin: left bottom;
+    animation: titleCycle 3s linear infinite;
+  }
+  .tl:nth-child(2) { animation-delay: 0.08s; }
+
+  /* ── producto central (z4, DELANTE del titulo) ── */
+  .hero-stage { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
 
   .product {
     position: absolute;
-    top: 50%;
+    top: 52%;
     left: 50%;
-    max-height: 76%;
-    max-width: 82%;
+    max-height: 66%;
+    max-width: 46%;
     width: auto;
     height: auto;
     transform: translate(-50%, -50%);
-    filter: drop-shadow(0 26px 32px rgba(0, 0, 0, 0.42));
+    filter: drop-shadow(0 30px 34px rgba(0, 0, 0, 0.45));
+    animation: productSpin 12s linear infinite;
   }
+  .hero-stage > .product:nth-child(1) { animation-delay: 0s; }
+  .hero-stage > .product:nth-child(2) { animation-delay: -9s; }
+  .hero-stage > .product:nth-child(3) { animation-delay: -6s; }
+  .hero-stage > .product:nth-child(4) { animation-delay: -3s; }
 
-  .ing {
-    position: absolute;
-    width: clamp(104px, 14vw, 178px);
-    height: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.4));
-  }
-
-  .ing-1 { top: 9%; right: 4%; transform: rotate(6deg); }
-  .ing-2 { bottom: 8%; left: 1%; transform: rotate(-7deg); }
-
-  /* ── animaciones del slideshow (CSS puro, sin JS — inmune al throttling de timers) ── */
+  /* ── animaciones (CSS puro, sin JS) ── */
   @keyframes slideFade {
     0%   { opacity: 1; }
     21%  { opacity: 1; }
@@ -363,59 +398,67 @@ import { content, business, images, heroSlides } from "../data/golosea";
     96%  { opacity: 0; }
     100% { opacity: 1; }
   }
-  @keyframes stagePop {
-    0%   { opacity: 1; transform: translateY(0) scale(1); }
-    21%  { opacity: 1; transform: translateY(0) scale(1); }
-    25%  { opacity: 0; transform: translateY(0) scale(1); }
-    96%  { opacity: 0; transform: translateY(30px) scale(0.94); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
+  /* titulo: sube y desaparece al salir; cae desde arriba y asienta con squash (3s = 1 seccion) */
+  @keyframes titleCycle {
+    0%   { opacity: 1; transform: translateY(0) scaleY(1); }
+    75%  { opacity: 1; transform: translateY(0) scaleY(1); }
+    82%  { opacity: 0; transform: translateY(-46px) scaleY(1.05); }
+    83%  { opacity: 0; transform: translateY(-82px) scaleY(0.95); }
+    93%  { opacity: 1; transform: translateY(0) scaleY(0.82); }
+    97%  { opacity: 1; transform: translateY(0) scaleY(1.07); }
+    100% { opacity: 1; transform: translateY(0) scaleY(1); }
   }
-  @keyframes dotActive {
-    0%   { background: #fff; color: var(--color-dark); }
-    21%  { background: #fff; color: var(--color-dark); }
-    25%  { background: rgba(255, 255, 255, 0.18); color: #fff; }
-    96%  { background: rgba(255, 255, 255, 0.18); color: #fff; }
-    100% { background: #fff; color: var(--color-dark); }
+  /* producto: sale antihorario hacia arriba; entra rapido, ladeado horario, y se centra */
+  @keyframes productSpin {
+    0%   { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+    20%  { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
+    25%  { opacity: 0; transform: translate(-50%, calc(-50% - 95px)) rotate(-20deg); }
+    93%  { opacity: 0; transform: translate(-50%, calc(-50% - 175px)) rotate(20deg); }
+    94%  {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% - 175px)) rotate(20deg);
+      animation-timing-function: cubic-bezier(0.18, 0.72, 0.3, 1);
+    }
+    100% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg); }
   }
-
-  /* contenido fijo encima */
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 1.25rem;
+  /* ingredientes de fondo: entran desde arriba, salen hacia arriba (sin girar) */
+  @keyframes decorMove {
+    0%   { opacity: 1; transform: translateY(0); }
+    21%  { opacity: 1; transform: translateY(0); }
+    25%  { opacity: 0; transform: translateY(-55px); }
+    90%  { opacity: 0; transform: translateY(-90px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
-
-  .hero-content .tagline,
-  .hero-content h1,
-  .hero-content .subtext {
-    max-width: 540px;
-  }
-
-  .tagline {
+  /* ── eyebrow (condensed bold) ── */
+  .hero-eyebrow {
+    position: absolute;
+    z-index: 5;
+    top: 8.5%;
+    left: clamp(1.25rem, 5vw, 5rem);
+    margin: 0;
+    font-family: "Anton", var(--font-heading);
+    font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    font-size: clamp(1.7rem, 4.4vw, 3.4rem);
     color: #fff;
-    opacity: 0.85;
-    font-weight: 700;
-    margin-bottom: 12px;
+    text-shadow: 0 3px 14px rgba(0, 0, 0, 0.3);
   }
 
-  .hero h1 {
-    font-size: clamp(2rem, 5vw, 3.4rem);
-    margin: 0 0 18px;
-    color: #fff;
-    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+  /* ── pie fijo: parrafo + CTAs ── */
+  .hero-foot {
+    position: absolute;
+    z-index: 5;
+    left: clamp(1.25rem, 5vw, 5rem);
+    bottom: clamp(1.5rem, 5vh, 3.4rem);
+    max-width: 440px;
   }
 
   .subtext {
-    font-size: 1.15rem;
-    margin: 0 0 30px;
-    opacity: 0.95;
-    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+    font-size: 1.02rem;
+    margin: 0 0 22px;
+    opacity: 0.96;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.38);
   }
 
   .hero-actions {
@@ -424,59 +467,19 @@ import { content, business, images, heroSlides } from "../data/golosea";
     flex-wrap: wrap;
   }
 
-  /* indicadores / selector de seccion */
-  .hero-dots {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 30px;
-  }
-
-  .dot {
-    display: inline-block;
-    font: inherit;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #fff;
-    background: rgba(255, 255, 255, 0.18);
-    border-radius: 999px;
-    padding: 7px 15px;
-    backdrop-filter: blur(4px);
-    animation: dotActive 12s linear infinite;
-  }
-
-  .hero-dots > .dot:nth-child(1) { animation-delay: 0s; }
-  .hero-dots > .dot:nth-child(2) { animation-delay: -9s; }
-  .hero-dots > .dot:nth-child(3) { animation-delay: -6s; }
-  .hero-dots > .dot:nth-child(4) { animation-delay: -3s; }
-
-  @media (prefers-reduced-motion: reduce) {
-    /* mantiene la rotacion (crossfade) pero sin el "pop" de entrada */
-    .stage { animation-name: slideFade; }
-  }
-
   @media (max-width: 860px) {
-    .hero {
-      min-height: 86vh;
-      align-items: flex-end;
-      padding-bottom: 42px;
+    .hero { min-height: 92vh; }
+    .hero-title {
+      top: 15%;
+      font-size: clamp(1.7rem, 8.5vw, 3.4rem);
     }
-    .hero::before {
-      background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.15) 0%,
-        rgba(0, 0, 0, 0.3) 45%,
-        rgba(0, 0, 0, 0.62) 100%
-      );
-    }
-    .hero-stage { width: 100%; }
-    .product { max-height: 52%; top: 34%; }
-    .ing { width: 82px; }
-    .ing-1 { top: 5%; right: 6%; }
-    .ing-2 { top: 27%; left: 4%; bottom: auto; }
-    .hero-content .tagline,
-    .hero-content h1,
-    .hero-content .subtext { max-width: 100%; }
+    .product { max-height: 44%; max-width: 78%; top: 50%; }
+    .ding:nth-child(1) { width: 130px; }
+    .ding:nth-child(2) { width: 108px; }
+    .ding:nth-child(3) { width: 88px; }
+    .ding:nth-child(4) { width: 120px; }
+    .ding:nth-child(5) { width: 98px; }
+    .hero-foot { max-width: calc(100% - 2.5rem); }
   }
 
   /* ── SERVICIOS ── */
