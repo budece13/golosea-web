@@ -57,8 +57,8 @@ import { content, business, images, heroSlides } from "../data/golosea";
     <div class="hero-foot">
       <p class="subtext">{content.hero_subtext}</p>
       <div class="hero-actions">
-        <a href="#contacto" class="btn">{content.cta_text} 🍬</a>
-        <a href={`tel:${business.phone.replace(/\s/g, "")}`} class="btn btn-outline">📞 {business.phone}</a>
+        <a href="#contacto" class="btn btn--accent">{content.cta_text} 🍬</a>
+        <a href={`tel:${business.phone.replace(/\s/g, "")}`} class="btn btn--outline">📞 {business.phone}</a>
       </div>
     </div>
 
@@ -167,7 +167,7 @@ import { content, business, images, heroSlides } from "../data/golosea";
           <input type="tel"   name="phone"   placeholder="Tu teléfono"        required />
           <input type="email" name="email"   placeholder="Tu email (opcional)" />
           <textarea           name="message" placeholder="¿En qué podemos ayudarte?"></textarea>
-          <button type="submit" class="btn">Enviar mensaje</button>
+          <button type="submit" class="btn btn--primary">Enviar mensaje</button>
           <p class="form-msg" id="formMsg"></p>
         </form>
       </div>
@@ -238,33 +238,6 @@ import { content, business, images, heroSlides } from "../data/golosea";
 
   .section-title span {
     color: var(--color-primary);
-  }
-
-  /* ── Botones ── */
-  .btn {
-    display: inline-block;
-    background: var(--color-accent);
-    color: #fff;
-    padding: 14px 28px;
-    border-radius: 999px;
-    font-weight: 700;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.15s, filter 0.15s;
-    text-decoration: none;
-  }
-
-  .btn:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.05);
-  }
-
-  .btn-outline {
-    background: transparent;
-    border: 2px solid #fff;
-    color: #fff;
   }
 
   /* ── HERO (poster slideshow) ── */
@@ -352,7 +325,7 @@ import { content, business, images, heroSlides } from "../data/golosea";
     top: 19%;
     left: clamp(1.25rem, 5vw, 5rem);
     margin: 0;
-    font-family: "Titan One", var(--font-heading);
+    font-family: var(--font-heading);
     font-weight: 400;
     text-transform: uppercase;
     line-height: 0.96;
@@ -443,8 +416,8 @@ import { content, business, images, heroSlides } from "../data/golosea";
     top: 8.5%;
     left: clamp(1.25rem, 5vw, 5rem);
     margin: 0;
-    font-family: "Anton", var(--font-heading);
-    font-weight: 400;
+    font-family: var(--font-subheading);
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     font-size: clamp(1.7rem, 4.4vw, 3.4rem);
@@ -712,8 +685,6 @@ import { content, business, images, heroSlides } from "../data/golosea";
   }
 
   form .btn {
-    background: var(--color-primary);
-    color: #fff;
     align-self: flex-start;
   }
 

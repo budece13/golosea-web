@@ -13,7 +13,7 @@ import { business, content } from "../data/golosea";
     </div>
     <a
       href={`https://wa.me/${business.whatsapp}?text=Hola%2C%20quiero%20pedir%20información`}
-      class="nav-cta"
+      class="btn btn--primary btn--sm"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -48,33 +48,20 @@ import { business, content } from "../data/golosea";
 
   .nav-links {
     display: flex;
-    gap: 24px;
+    gap: 28px;
   }
 
   .nav-links a {
     font-weight: 500;
     font-size: 0.95rem;
     color: var(--color-dark);
-    transition: color 0.15s;
+    opacity: 0.75;
+    transition: opacity 0.15s, color 0.15s;
   }
 
   .nav-links a:hover {
+    opacity: 1;
     color: var(--color-primary);
-  }
-
-  .nav-cta {
-    background: var(--color-primary);
-    color: #fff;
-    padding: 9px 18px;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: filter 0.15s, transform 0.15s;
-  }
-
-  .nav-cta:hover {
-    filter: brightness(1.08);
-    transform: translateY(-1px);
   }
 
   .container {

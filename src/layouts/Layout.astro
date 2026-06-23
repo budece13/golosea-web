@@ -13,10 +13,14 @@ const {
   description = content.seo_description,
 } = Astro.props;
 
-const headingFamily = encodeURIComponent(fonts.heading);
-const bodyFamily    = encodeURIComponent(fonts.body);
+// Ranchers solo tiene peso 400; Fredoka y Nunito si son variables.
+const headingFamily    = encodeURIComponent(fonts.heading);
+const subheadingFamily = encodeURIComponent(fonts.subheading);
+const bodyFamily       = encodeURIComponent(fonts.body);
 const googleFontsUrl =
-  `https://fonts.googleapis.com/css2?family=${headingFamily}:wght@600;700;800&family=${bodyFamily}:wght@400;500;600;700&display=swap`;
+  `https://fonts.googleapis.com/css2?family=${headingFamily}` +
+  `&family=${subheadingFamily}:wght@500;600;700` +
+  `&family=${bodyFamily}:wght@400;500;600;700&display=swap`;
 ---
 
 <!doctype html>
@@ -35,11 +39,6 @@ const googleFontsUrl =
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href={googleFontsUrl} />
-    <!-- Fuentes del hero: Anton (eyebrow) + Titan One (titular, provisional) -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Titan+One&display=swap"
-    />
   </head>
 
   <body>
@@ -51,20 +50,26 @@ const googleFontsUrl =
 </html>
 
 <style define:vars={{
-  colorPrimary: palette.primary,
-  colorAccent:  palette.accent,
-  colorDark:    palette.dark,
-  colorLight:   palette.light,
-  fontHeading:  `"${fonts.heading}", system-ui, sans-serif`,
-  fontBody:     `"${fonts.body}", system-ui, sans-serif`,
+  colorPrimary:     palette.primary,
+  colorPrimaryDark: palette.primaryDark,
+  colorAccent:      palette.accent,
+  colorAccentDark:  palette.accentDark,
+  colorDark:        palette.dark,
+  colorLight:       palette.light,
+  fontHeading:    `"${fonts.heading}", system-ui, sans-serif`,
+  fontSubheading: `"${fonts.subheading}", system-ui, sans-serif`,
+  fontBody:       `"${fonts.body}", system-ui, sans-serif`,
 }}>
   :root {
-    --color-primary: var(--colorPrimary);
-    --color-accent:  var(--colorAccent);
-    --color-dark:    var(--colorDark);
-    --color-light:   var(--colorLight);
-    --font-heading:  var(--fontHeading);
-    --font-body:     var(--fontBody);
+    --color-primary:      var(--colorPrimary);
+    --color-primary-dark: var(--colorPrimaryDark);
+    --color-accent:       var(--colorAccent);
+    --color-accent-dark:  var(--colorAccentDark);
+    --color-dark:         var(--colorDark);
+    --color-light:        var(--colorLight);
+    --font-heading:    var(--fontHeading);
+    --font-subheading: var(--fontSubheading);
+    --font-body:       var(--fontBody);
   }
 
   *,
@@ -87,8 +92,13 @@ const googleFontsUrl =
     -webkit-font-smoothing: antialiased;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1 {
     font-family: var(--font-heading);
+    line-height: 1.1;
+  }
+
+  h2, h3, h4, h5, h6 {
+    font-family: var(--font-subheading);
     line-height: 1.2;
   }
 
@@ -102,4 +112,64 @@ const googleFontsUrl =
     text-decoration: none;
   }
 
+</style>
+
+<style is:global>
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* ── Botones reutilizables ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1;
+    border: 2px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn--primary {
+    background: var(--color-primary);
+    color: #fff;
+  }
+  .btn--primary:hover {
+    background: var(--color-primary-dark);
+  }
+
+  .btn--accent {
+    background: var(--color-accent);
+    color: #fff;
+  }
+  .btn--accent:hover {
+    background: var(--color-accent-dark);
+  }
+
+  .btn--outline {
+    background: transparent;
+    border-color: currentColor;
+  }
+  .btn--outline:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  /* Variante compacta (navbar, controles pequeños) */
+  .btn--sm {
+    padding: 9px 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
 </style>

@@ -100,15 +100,19 @@ export const content = {
 } as const;
 
 export const palette = {
-  primary: "#E8455A", // rojo sandia/fresa (no hiper intenso)
-  accent:  "#2FA84F", // verde fresco de sandia
-  dark:    "#1C4532", // verde corteza profundo (secciones oscuras y texto)
-  light:   "#FFF6F5", // blanco calido
+  // Paleta sandia: rosa/fresa + verdes
+  primary:     "#E8455A", // rosa sandia (botones, acentos) — el del nav
+  primaryDark: "#C8364A", // rosa hover/activo
+  accent:      "#18B24C", // verde potente y fresco (CTAs verdes, detalles)
+  accentDark:  "#0F8F3B", // verde hover/activo
+  dark:        "#0F3B2A", // verde bosque profundo (secciones oscuras y texto)
+  light:       "#FFF6F5", // crema rosada (fondos suaves)
 } as const;
 
 export const fonts = {
-  heading: "Baloo 2",
-  body:    "Nunito",
+  heading:    "Ranchers", // titular principal (solo peso 400)
+  subheading: "Fredoka",  // subtitulos y headings secundarios
+  body:       "Nunito",   // texto
 } as const;
 
 export const images = {
