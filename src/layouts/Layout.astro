@@ -14,10 +14,14 @@ const {
   description = content.seo_description,
 } = Astro.props;
 
-const headingFamily = encodeURIComponent(fonts.heading);
-const bodyFamily    = encodeURIComponent(fonts.body);
+// Ranchers solo tiene peso 400; Fredoka y Nunito si son variables.
+const headingFamily    = encodeURIComponent(fonts.heading);
+const subheadingFamily = encodeURIComponent(fonts.subheading);
+const bodyFamily       = encodeURIComponent(fonts.body);
 const googleFontsUrl =
-  `https://fonts.googleapis.com/css2?family=${headingFamily}:wght@600;700;800&family=${bodyFamily}:wght@400;500;600;700&display=swap`;
+  `https://fonts.googleapis.com/css2?family=${headingFamily}` +
+  `&family=${subheadingFamily}:wght@500;600;700` +
+  `&family=${bodyFamily}:wght@400;500;600;700&display=swap`;
 ---
 
 <!doctype html>
@@ -36,7 +40,7 @@ const googleFontsUrl =
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href={googleFontsUrl} />
-    <!-- Fuentes del hero: Anton (eyebrow) + Titan One (titular, provisional) -->
+    <!-- Fuentes propias del hero (Anton + Titan One) — para no alterar su aspecto -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Anton&family=Titan+One&display=swap"
@@ -53,28 +57,26 @@ const googleFontsUrl =
 </html>
 
 <style define:vars={{
-  colorPrimary: palette.primary,
-  colorAccent:  palette.accent,
-  colorDark:    palette.dark,
-  colorLight:   palette.light,
-  fontHeading:  `"${fonts.heading}", system-ui, sans-serif`,
-  fontBody:     `"${fonts.body}", system-ui, sans-serif`,
+  colorPrimary:     palette.primary,
+  colorPrimaryDark: palette.primaryDark,
+  colorAccent:      palette.accent,
+  colorAccentDark:  palette.accentDark,
+  colorDark:        palette.dark,
+  colorLight:       palette.light,
+  fontHeading:    `"${fonts.heading}", system-ui, sans-serif`,
+  fontSubheading: `"${fonts.subheading}", system-ui, sans-serif`,
+  fontBody:       `"${fonts.body}", system-ui, sans-serif`,
 }}>
   :root {
-    --color-primary: var(--colorPrimary);
-    --color-accent:  var(--colorAccent);
-    --color-dark:    var(--colorDark);
-    --color-light:   var(--colorLight);
-    --font-heading:  var(--fontHeading);
-    --font-body:     var(--fontBody);
-  }
-
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    --color-primary:      var(--colorPrimary);
+    --color-primary-dark: var(--colorPrimaryDark);
+    --color-accent:       var(--colorAccent);
+    --color-accent-dark:  var(--colorAccentDark);
+    --color-dark:         var(--colorDark);
+    --color-light:        var(--colorLight);
+    --font-heading:    var(--fontHeading);
+    --font-subheading: var(--fontSubheading);
+    --font-body:       var(--fontBody);
   }
 
   html {
@@ -88,25 +90,9 @@ const googleFontsUrl =
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
-    line-height: 1.2;
-  }
-
-  img {
-    max-width: 100%;
-    display: block;
-  }
-
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
 </style>
 
-<!-- Estilos compartidos por todas las páginas (botones, contenedores, títulos de sección) -->
+<!-- Estilos compartidos por todas las páginas -->
 <style is:global>
   *,
   *::before,
@@ -124,8 +110,12 @@ const googleFontsUrl =
     max-width: 100%;
     display: block;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1 {
     font-family: var(--font-heading);
+    line-height: 1.1;
+  }
+  h2, h3, h4, h5, h6 {
+    font-family: var(--font-subheading);
     line-height: 1.2;
   }
 
@@ -153,40 +143,42 @@ const googleFontsUrl =
     color: var(--color-primary);
   }
 
+  /* ── Botones reutilizables ── */
   .btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
     background: var(--color-accent);
     color: #fff;
     padding: 14px 28px;
     border-radius: 999px;
-    font-weight: 700;
     font-family: var(--font-body);
+    font-weight: 700;
     font-size: 1rem;
-    border: none;
+    line-height: 1;
+    border: 2px solid transparent;
     cursor: pointer;
-    transition: transform 0.15s, filter 0.15s;
     text-decoration: none;
+    transition: transform 0.15s, background 0.15s, filter 0.15s;
   }
-
   .btn:hover {
     transform: translateY(-2px);
-    filter: brightness(1.05);
+    background: var(--color-accent-dark);
+  }
+  .btn:active { transform: translateY(0); }
+  .btn:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
   }
 
   .btn-outline {
     background: transparent;
-    border: 2px solid #fff;
+    border-color: #fff;
     color: #fff;
   }
-
-  /* Estados de interacción accesibles (no alteran el reposo) */
-  .btn:active {
-    transform: translateY(0);
-    filter: brightness(0.98);
-  }
-  .btn:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 3px;
+  .btn-outline:hover {
+    background: rgba(255, 255, 255, 0.12);
   }
 
   a:focus-visible {
@@ -195,7 +187,7 @@ const googleFontsUrl =
     border-radius: 4px;
   }
 
-  /* La navbar sticky (68px) no debe tapar las secciones ancladas */
+  /* La navbar sticky no debe tapar las secciones ancladas */
   section[id] {
     scroll-margin-top: 84px;
   }
