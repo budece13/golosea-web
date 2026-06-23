@@ -1,0 +1,99 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Placeholder: se editará con las campañas reales de cada temporada.
+const eventos = [
+  { emoji: "🎃", t: "Halloween", fecha: "31 oct", d: "Cucuruchos de miedo y chuches temáticas para la noche más dulce." },
+  { emoji: "🎄", t: "Navidad", fecha: "Diciembre", d: "Cestas y detalles navideños para regalar (o autorregalarte)." },
+  { emoji: "💘", t: "San Valentín", fecha: "14 feb", d: "Chocolates y gominolas con forma de corazón." },
+  { emoji: "🎭", t: "Carnaval", fecha: "Febrero", d: "Bolsas de chuches para disfraces y desfiles." },
+  { emoji: "🐰", t: "Pascua", fecha: "Primavera", d: "Huevos de chocolate y sorpresas para los peques." },
+  { emoji: "🎉", t: "Novedades", fecha: "Todo el año", d: "Las últimas chuches y snacks que van llegando a la tienda." },
+];
+---
+
+<Layout
+  title="Festivos y novedades | Golosea"
+  description="Campañas de temporada, productos nuevos y fechas especiales en Golosea, El Bonillo."
+>
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Calendario dulce</p>
+      <h1>Festivos y novedades</h1>
+      <p class="lead">
+        Lo último de Golosea: campañas de temporada, productos nuevos y fechas
+        especiales para no perderte ni un antojo.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid">
+        {eventos.map((e) => (
+          <article class="card">
+            <div class="card-emoji">{e.emoji}</div>
+            <span class="fecha">{e.fecha}</span>
+            <h3>{e.t}</h3>
+            <p>{e.d}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-head {
+    background: var(--color-light);
+    padding: 64px 0 44px;
+    text-align: center;
+  }
+  .page-head .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+  }
+  .page-head h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--color-dark);
+    margin-bottom: 12px;
+  }
+  .page-head .lead {
+    max-width: 600px;
+    margin: 0 auto;
+    color: #555;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: var(--color-light);
+    border-radius: 16px;
+    padding: 28px;
+    border: 1px solid #eee;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-4px);
+  }
+  .card-emoji { font-size: 2rem; margin-bottom: 10px; }
+  .fecha {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-primary);
+    margin-bottom: 6px;
+  }
+  .card h3 { margin-bottom: 8px; font-size: 1.15rem; color: var(--color-dark); }
+  .card p { color: #555; font-size: 0.95rem; line-height: 1.5; }
+</style>

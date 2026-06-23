@@ -65,59 +65,68 @@ import { content, business, images, heroSlides } from "../data/golosea";
   </section>
 
   <!-- ═══════════════════════════════════════════
-       SERVICIOS
+       ENCARGOS — formulario de cucuruchos -> WhatsApp
   ═══════════════════════════════════════════ -->
-  <section id="servicios" class="section">
-    <div class="container">
-      <div class="section-title">
-        <h2>Nuestros <span>servicios</span></h2>
+  <section id="encargos" class="section encargos-section">
+    <div class="container encargos-wrap">
+      <div class="encargos-head">
+        <p class="eyebrow">Cucuruchos personalizados</p>
+        <h2>Encarga tu <span>cucurucho de chuches</span></h2>
+        <p class="encargos-sub">
+          Perfectos para cumpleaños y fiestas infantiles. Rellena el formulario
+          y te confirmamos el pedido al instante por WhatsApp.
+        </p>
       </div>
-      <div class="grid">
-        {content.services.map((s) => (
-          <article class="card">
-            <div class="card-emoji">{s.emoji}</div>
-            <h3>{s.title}</h3>
-            <p>{s.description}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
 
-  <!-- ═══════════════════════════════════════════
-       NOSOTROS — foto + texto + por qué elegirnos
-  ═══════════════════════════════════════════ -->
-  <section id="nosotros" class="section about-section">
-    <div class="container">
-      <div class="about-grid">
-        <img
-          src={images.about.url}
-          alt={images.about.alt}
-          loading="lazy"
-        />
-        <div class="about-text">
-          <h2>{content.about_title}</h2>
-          <p>{content.about_text}</p>
-          <div class="why-grid">
-            {content.why_choose.map((w) => (
-              <div class="why-item">
-                <div class="why-emoji">{w.emoji}</div>
-                <div>
-                  <h4>{w.title}</h4>
-                  <p>{w.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+      <form id="encargoForm" class="encargo-form" data-wa={business.whatsapp}>
+        <div class="ef-field">
+          <label for="ef-nombre">Nombre</label>
+          <input id="ef-nombre" name="nombre" type="text" autocomplete="name" required />
         </div>
-      </div>
+
+        <div class="ef-field">
+          <label for="ef-email">Correo electrónico <span class="ef-opt">(opcional)</span></label>
+          <input id="ef-email" name="email" type="email" autocomplete="email" placeholder="tucorreo@email.com" />
+        </div>
+
+        <div class="ef-field">
+          <label for="ef-cantidad">Cantidad de cucuruchos</label>
+          <input id="ef-cantidad" name="cantidad" type="number" min="1" inputmode="numeric" placeholder="Ej. 12" required />
+        </div>
+
+        <div class="ef-field">
+          <label for="ef-dia">Día de recogida</label>
+          <input id="ef-dia" name="dia" type="date" required />
+          <small class="ef-hint">Mínimo 3 días de antelación</small>
+        </div>
+
+        <div class="ef-field">
+          <label for="ef-hora">Hora de recogida</label>
+          <input id="ef-hora" name="hora" type="time" required />
+        </div>
+
+        <div class="ef-field ef-full">
+          <label for="ef-comentarios">Comentarios <span class="ef-opt">(opcional)</span></label>
+          <textarea id="ef-comentarios" name="comentarios" rows="3" placeholder="Colores, temática, alergias, número de niños..."></textarea>
+        </div>
+
+        <div class="ef-full ef-actions">
+          <button type="submit" class="ef-submit">
+            <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+              <path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.3.6 4.4 1.7 6.3L3 29l7.4-2.1c1.8 1 3.9 1.5 6 1.5 7 0 12.5-5.5 12.5-12.5S23 3 16 3zm0 22.7c-1.9 0-3.7-.5-5.3-1.4l-.4-.2-4.4 1.2 1.2-4.3-.3-.4c-1-1.6-1.5-3.5-1.5-5.4C5.5 9.6 10.2 5 16 5s10.5 4.6 10.5 10.5S21.8 25.7 16 25.7zm5.8-7.8c-.3-.2-1.9-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1c-1.9-.9-3.1-1.7-4.3-3.8-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-1 1-1.3 2.3-1.3 3.9 0 2.3 1.7 4.5 1.9 4.8.2.3 3.3 5 8 7 .7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.9-.8 2.1-1.5.3-.8.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z" />
+            </svg>
+            Pedir por WhatsApp
+          </button>
+          <p class="ef-msg" id="efMsg" role="alert" aria-live="polite"></p>
+        </div>
+      </form>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════
        GALERÍA
   ═══════════════════════════════════════════ -->
-  <section class="gallery-section">
+  <section id="galeria" class="gallery-section">
     <div class="gallery-grid">
       {images.gallery.map((img) => (
         <img src={img.url} alt={img.alt} loading="lazy" />
@@ -126,9 +135,9 @@ import { content, business, images, heroSlides } from "../data/golosea";
   </section>
 
   <!-- ═══════════════════════════════════════════
-       TESTIMONIOS
+       RESEÑAS
   ═══════════════════════════════════════════ -->
-  <section id="opiniones" class="section testimonials-section">
+  <section id="resenas" class="section testimonials-section">
     <div class="container">
       <div class="section-title">
         <h2 style="color:#fff">Lo que dicen nuestros <span>clientes</span></h2>
@@ -147,71 +156,105 @@ import { content, business, images, heroSlides } from "../data/golosea";
   </section>
 
   <!-- ═══════════════════════════════════════════
-       CONTACTO — info + formulario de lead
+       MAPA + contacto
   ═══════════════════════════════════════════ -->
-  <section id="contacto" class="section contact-section">
+  <section id="mapa" class="section map-section">
     <div class="container">
       <div class="section-title">
-        <h2>Pide <span>información</span></h2>
+        <h2>Dónde <span>estamos</span></h2>
       </div>
-      <div class="contact-grid">
+      <div class="map-grid">
+        <iframe
+          class="map-frame"
+          src={business.mapsEmbed}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Ubicación de Golosea en el mapa"
+        ></iframe>
         <div class="contact-info">
           <h3>{business.name}</h3>
-          <p><span class="ci-label">📍 Dirección:</span><br />{business.address}</p>
-          <p><span class="ci-label">📞 Teléfono:</span> <a href={`tel:${business.phone.replace(/\s/g,"")}`}>{business.phone}</a></p>
-          <p><span class="ci-label">⭐ Valoración:</span> {business.rating} / 5 ({business.ratingsCount} reseñas)</p>
-          <p class="contact-hint">Déjanos tus datos y te contactamos lo antes posible.</p>
+          <p><span class="ci-label">📍</span> {business.address}</p>
+          <p><span class="ci-label">📞</span> <a href={`tel:${business.phone.replace(/\s/g,"")}`}>{business.phone}</a></p>
+          <p><span class="ci-label">⭐</span> {business.rating} / 5 ({business.ratingsCount} reseñas)</p>
+          <p class="contact-hint">Martes a domingo, mañana y tarde · Lunes cerrado.</p>
+          <a href="#encargos" class="btn">Hacer un encargo</a>
         </div>
-        <form id="leadForm">
-          <input type="text"  name="name"    placeholder="Tu nombre"          required />
-          <input type="tel"   name="phone"   placeholder="Tu teléfono"        required />
-          <input type="email" name="email"   placeholder="Tu email (opcional)" />
-          <textarea           name="message" placeholder="¿En qué podemos ayudarte?"></textarea>
-          <button type="submit" class="btn">Enviar mensaje</button>
-          <p class="form-msg" id="formMsg"></p>
-        </form>
       </div>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════
-       FOOTER
+       VISITAS DEL MES — registro (placeholder; se conecta al editar)
   ═══════════════════════════════════════════ -->
-  <footer class="footer">
-    <div class="brand">{business.name}</div>
-    <p>{business.address}</p>
-    <small>Web creada con IA · 2025</small>
-  </footer>
+  <section class="visits-section">
+    <div class="container">
+      <p class="visits-label">Visitas a la web este mes</p>
+      <p class="visits-count" id="visitsCount">—</p>
+      <p class="visits-hint">¡Gracias por pasarte por Golosea! 🍬</p>
+    </div>
+  </section>
 
 </Layout>
 
 <!-- ═══════════════════════════════════════════
-     SCRIPT — formulario de contacto
+     SCRIPT — encargo de cucuruchos -> WhatsApp
 ═══════════════════════════════════════════ -->
 <script>
-  const form = document.getElementById('leadForm') as HTMLFormElement;
-  const msg  = document.getElementById('formMsg')!;
+  const form = document.getElementById('encargoForm') as HTMLFormElement | null;
+  const dia = document.getElementById('ef-dia') as HTMLInputElement | null;
+  const msg = document.getElementById('efMsg');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    msg.textContent = 'Enviando...';
-    msg.style.color = '#666';
-    const data = Object.fromEntries(new FormData(form).entries());
-    try {
-      const r = await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+  if (form && dia && msg) {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const min = new Date();
+    min.setDate(min.getDate() + 3);
+    const minStr = `${min.getFullYear()}-${pad(min.getMonth() + 1)}-${pad(min.getDate())}`;
+    dia.min = minStr;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const f = new FormData(form);
+      const diaVal = String(f.get('dia') || '');
+      if (diaVal < minStr) {
+        msg.textContent = 'La recogida debe ser con al menos 3 días de antelación.';
+        msg.className = 'ef-msg err';
+        dia.focus();
+        return;
+      }
+      const wa = form.dataset.wa || '';
+      const fecha = new Date(diaVal + 'T00:00').toLocaleDateString('es-ES', {
+        weekday: 'long', day: 'numeric', month: 'long',
       });
-      if (!r.ok) throw new Error();
-      msg.textContent = '✅ Gracias, hemos recibido tu mensaje. Te contactaremos pronto.';
-      msg.style.color = 'green';
+      const lines = [
+        '¡Hola! Quiero encargar un cucurucho de chuches 🍬',
+        `• Nombre: ${f.get('nombre')}`,
+        f.get('email') ? `• Email: ${f.get('email')}` : '',
+        `• Cantidad: ${f.get('cantidad')}`,
+        `• Recogida: ${fecha} a las ${f.get('hora')}`,
+        f.get('comentarios') ? `• Comentarios: ${f.get('comentarios')}` : '',
+      ].filter(Boolean);
+      const url = `https://wa.me/${wa}?text=${encodeURIComponent(lines.join('\n'))}`;
+      window.open(url, '_blank');
+      msg.textContent = '✅ Abriendo WhatsApp para confirmar tu pedido...';
+      msg.className = 'ef-msg ok';
       form.reset();
-    } catch {
-      msg.textContent = '❌ No se pudo enviar. Inténtalo de nuevo o llámanos.';
-      msg.style.color = 'crimson';
-    }
-  });
+    });
+  }
+</script>
+
+<!-- ═══════════════════════════════════════════
+     SCRIPT — contador de visitas del mes
+═══════════════════════════════════════════ -->
+<script>
+  fetch('/api/visits')
+    .then((r) => r.json())
+    .then((d) => {
+      const el = document.getElementById('visitsCount');
+      if (el && typeof d.count === 'number') {
+        el.textContent = d.count.toLocaleString('es-ES');
+      }
+    })
+    .catch(() => {});
 </script>
 
 <style>
@@ -489,104 +532,6 @@ import { content, business, images, heroSlides } from "../data/golosea";
     .hero-foot { max-width: calc(100% - 2.5rem); }
   }
 
-  /* ── SERVICIOS ── */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 24px;
-  }
-
-  .card {
-    background: var(--color-light);
-    border-radius: 16px;
-    padding: 28px;
-    border: 1px solid #eee;
-    transition: box-shadow 0.2s, transform 0.2s;
-  }
-
-  .card:hover {
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    transform: translateY(-4px);
-  }
-
-  .card-emoji {
-    font-size: 2rem;
-    margin-bottom: 12px;
-  }
-
-  .card h3 {
-    margin-bottom: 8px;
-    font-size: 1.15rem;
-    color: var(--color-dark);
-  }
-
-  .card p {
-    color: #555;
-    font-size: 0.95rem;
-    line-height: 1.5;
-  }
-
-  /* ── NOSOTROS ── */
-  .about-section {
-    background: var(--color-light);
-  }
-
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    align-items: center;
-  }
-
-  .about-grid img {
-    border-radius: 18px;
-    height: 100%;
-    object-fit: cover;
-    max-height: 420px;
-    width: 100%;
-  }
-
-  .about-text h2 {
-    font-size: clamp(1.6rem, 4vw, 2.2rem);
-    color: var(--color-dark);
-    margin-bottom: 16px;
-  }
-
-  .about-text > p {
-    color: #444;
-    margin-bottom: 28px;
-    font-size: 1.025rem;
-    line-height: 1.7;
-  }
-
-  .why-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .why-item {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-  }
-
-  .why-emoji {
-    font-size: 1.6rem;
-    flex-shrink: 0;
-  }
-
-  .why-item h4 {
-    margin-bottom: 4px;
-    font-size: 1rem;
-    color: var(--color-dark);
-  }
-
-  .why-item p {
-    color: #555;
-    font-size: 0.9rem;
-  }
-
   /* ── GALERÍA ── */
   .gallery-section {
     overflow: hidden;
@@ -644,15 +589,24 @@ import { content, business, images, heroSlides } from "../data/golosea";
     margin-left: 6px;
   }
 
-  /* ── CONTACTO ── */
-  .contact-section {
+  /* ── MAPA + contacto ── */
+  .map-section {
     background: var(--color-light);
   }
 
-  .contact-grid {
+  .map-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items: stretch;
+  }
+
+  .map-frame {
+    width: 100%;
+    height: 100%;
+    min-height: 380px;
+    border: 0;
+    border-radius: 18px;
   }
 
   .contact-info h3 {
@@ -678,79 +632,152 @@ import { content, business, images, heroSlides } from "../data/golosea";
   }
 
   .contact-hint {
-    margin-top: 18px;
+    margin: 14px 0 16px;
     color: #666;
     font-style: italic;
   }
 
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+  /* ── ENCARGOS (formulario -> WhatsApp) ── */
+  .encargos-section {
+    background: linear-gradient(180deg, #fffaf7 0%, var(--color-light) 100%);
+  }
+  .encargos-wrap { max-width: 760px; }
+
+  .encargos-head { text-align: center; margin-bottom: 34px; }
+  .encargos-head .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+  }
+  .encargos-head h2 {
+    font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+    color: var(--color-dark);
+  }
+  .encargos-head h2 span { color: var(--color-primary); }
+  .encargos-sub {
+    max-width: 520px;
+    margin: 14px auto 0;
+    color: #5b5b5b;
+    line-height: 1.6;
   }
 
-  form input,
-  form textarea {
-    padding: 13px 16px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+  .encargo-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 20px;
+    background: #fff;
+    border: 1px solid #f1e7e4;
+    border-radius: 22px;
+    padding: 32px;
+    box-shadow: 0 18px 50px rgba(28, 69, 50, 0.07);
+  }
+  .ef-field { display: flex; flex-direction: column; gap: 7px; }
+  .ef-full { grid-column: 1 / -1; }
+
+  .ef-field label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-dark);
+  }
+  .ef-opt { font-weight: 400; color: #9a9a9a; }
+
+  .ef-field input,
+  .ef-field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #e7dedb;
+    border-radius: 12px;
     font-family: var(--font-body);
     font-size: 1rem;
-    outline: none;
-    transition: border-color 0.15s;
+    color: var(--color-dark);
     background: #fff;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
-
-  form input:focus,
-  form textarea:focus {
+  .ef-field input:focus,
+  .ef-field textarea:focus {
     border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(232, 69, 90, 0.12);
   }
+  .ef-field textarea { resize: vertical; min-height: 82px; }
+  .ef-hint { font-size: 0.78rem; color: #9a9a9a; }
 
-  form textarea {
-    min-height: 120px;
-    resize: vertical;
+  .ef-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 4px;
   }
-
-  form .btn {
-    background: var(--color-primary);
+  .ef-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    background: #25d366;
     color: #fff;
-    align-self: flex-start;
+    border: none;
+    cursor: pointer;
+    padding: 14px 26px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 8px 18px rgba(37, 211, 102, 0.32);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  }
+  .ef-submit svg { width: 20px; height: 20px; }
+  .ef-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(37, 211, 102, 0.4);
+    filter: brightness(1.03);
+  }
+  .ef-submit:active { transform: translateY(0); }
+  .ef-submit:focus-visible { outline: 3px solid rgba(37, 211, 102, 0.45); outline-offset: 3px; }
+
+  .ef-msg { font-size: 0.92rem; min-height: 1.2em; margin: 0; }
+  .ef-msg.ok { color: #1a8a3f; }
+  .ef-msg.err { color: #c0322b; }
+
+  @media (max-width: 600px) {
+    .encargo-form { grid-template-columns: 1fr; padding: 22px; }
   }
 
-  .form-msg {
-    font-size: 0.95rem;
-    min-height: 1.4em;
-  }
-
-  /* ── FOOTER ── */
-  .footer {
+  /* ── VISITAS DEL MES ── */
+  .visits-section {
     background: var(--color-dark);
     color: #fff;
     text-align: center;
-    padding: 32px 20px;
+    padding: 48px 0;
   }
 
-  .brand {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 1.25rem;
+  .visits-label {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.85rem;
+    opacity: 0.8;
     margin-bottom: 6px;
   }
 
-  .footer p {
-    opacity: 0.8;
-    margin-bottom: 4px;
+  .visits-count {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(2.4rem, 7vw, 4rem);
+    color: var(--color-accent);
+    line-height: 1.1;
   }
 
-  .footer small {
-    opacity: 0.5;
-    font-size: 0.8rem;
+  .visits-hint {
+    opacity: 0.75;
+    font-size: 0.95rem;
+    margin-top: 4px;
   }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 760px) {
-    .about-grid,
-    .contact-grid {
+    .map-grid {
       grid-template-columns: 1fr;
     }
 
