@@ -3,9 +3,11 @@ import { business, content } from "../data/golosea";
 
 const path = Astro.url.pathname;
 const links = [
+  { href: "/#hero", label: "Inicio" },
   { href: "/#encargos", label: "Encargos" },
   { href: "/#galeria", label: "Galería" },
   { href: "/#resenas", label: "Reseñas" },
+  { href: "/#mapa", label: "Encuéntranos" },
   { href: "/sobre-golosea", label: "Sobre Golosea" },
   { href: "/festivos", label: "Festivos" },
 ];
@@ -23,17 +25,19 @@ const links = [
       <span>{business.name}</span>
     </a>
 
-    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navMenu">
-      <span></span><span></span><span></span>
-    </button>
+    <nav class="nav-links" id="navMenu" aria-label="Principal">
+      {links.map((l) => (
+        <a href={l.href} class:list={["nav-link", { active: l.href === path }]}>{l.label}</a>
+      ))}
+      <a href="/#encargos" class="nav-cta-mob">{content.cta_text}</a>
+      <span class="nav-indicator" aria-hidden="true"></span>
+    </nav>
 
-    <div class="nav-collapse" id="navMenu">
-      <nav class="nav-links" aria-label="Principal">
-        {links.map((l) => (
-          <a href={l.href} class:list={["nav-link", { active: l.href === path }]}>{l.label}</a>
-        ))}
-      </nav>
+    <div class="nav-right">
       <a href="/#encargos" class="nav-cta">{content.cta_text}</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </header>
@@ -55,11 +59,11 @@ const links = [
   }
 
   .nav-inner {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 70px;
-    gap: 24px;
   }
 
   .brand {
@@ -74,28 +78,57 @@ const links = [
   }
   .brand-mark { width: 25px; height: 25px; }
 
-  .nav-collapse {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-  }
+  /* Links centrados en la pantalla (absolutos respecto a la barra) */
   .nav-links {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: 70px;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
-    gap: 28px;
+    gap: 24px;
   }
   .nav-link {
+    position: relative;
     font-weight: 600;
     font-size: 0.94rem;
     color: #3b4a42;
-    transition: color 0.15s ease;
+    transition: color 0.18s ease;
+    white-space: nowrap;
   }
-  .nav-link:hover { color: var(--color-primary); }
-  .nav-link.active {
-    color: var(--color-primary);
-    font-weight: 700;
+  .nav-link:hover,
+  .nav-link.active { color: var(--color-primary); }
+
+  /* ── Palito de caramelo deslizante ── */
+  .nav-indicator {
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    width: 0;
+    height: 6px;
+    border-radius: 999px;
+    background: repeating-linear-gradient(45deg, var(--color-primary) 0 6px, #fff 6px 12px);
+    box-shadow: 0 3px 7px rgba(232, 69, 90, 0.45), inset 0 0 0 1px rgba(232, 69, 90, 0.3);
+    opacity: 0;
+    transform: translateX(0);
+    transition:
+      transform 0.38s cubic-bezier(0.34, 1.45, 0.5, 1),
+      width 0.38s cubic-bezier(0.34, 1.45, 0.5, 1),
+      opacity 0.2s ease;
+    animation: candyFlow 0.8s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes candyFlow {
+    to { background-position: 17px 0; }
   }
 
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+  }
   .nav-cta {
     background: var(--color-primary);
     color: #fff;
@@ -113,8 +146,8 @@ const links = [
     background: var(--color-primary-dark);
   }
   .nav-cta:active { transform: translateY(0); }
+  .nav-cta-mob { display: none; }
 
-  /* Hamburguesa */
   .nav-toggle {
     display: none;
     flex-direction: column;
@@ -141,6 +174,7 @@ const links = [
 
   .nav-link:focus-visible,
   .nav-cta:focus-visible,
+  .nav-cta-mob:focus-visible,
   .brand:focus-visible,
   .nav-toggle:focus-visible {
     outline: 2px solid var(--color-primary);
@@ -148,14 +182,19 @@ const links = [
     border-radius: 6px;
   }
 
-  @media (max-width: 900px) {
+  /* ── Móvil / tablet: menú desplegable ── */
+  @media (max-width: 1080px) {
     .nav-toggle { display: flex; }
+    .nav-cta { display: none; }
+    .nav-indicator { display: none; }
 
-    .nav-collapse {
+    .nav-links {
       position: absolute;
-      top: 100%;
       left: 0;
       right: 0;
+      top: 100%;
+      height: auto;
+      transform: none;
       flex-direction: column;
       align-items: stretch;
       gap: 0;
@@ -168,30 +207,31 @@ const links = [
       pointer-events: none;
       transition: clip-path 0.28s ease, opacity 0.2s ease;
     }
-    .nav-collapse.open {
+    .nav-links.open {
       clip-path: inset(0 0 0 0);
       opacity: 1;
       pointer-events: auto;
-    }
-    .nav-links {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0;
     }
     .nav-link {
       padding: 14px 1.5rem;
       font-size: 1rem;
     }
     .nav-link.active { background: var(--color-light); }
-    .nav-cta {
+    .nav-cta-mob {
+      display: block;
       margin: 12px 1.5rem 4px;
       text-align: center;
+      background: var(--color-primary);
+      color: #fff;
       padding: 13px 20px;
+      border-radius: 999px;
+      font-weight: 700;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .navbar, .nav-link, .nav-cta, .nav-toggle span, .nav-collapse { transition: none; }
+    .navbar, .nav-link, .nav-cta, .nav-toggle span, .nav-links { transition: none; }
+    .nav-indicator { animation: none; transition: opacity 0.2s ease; }
   }
 </style>
 
@@ -199,17 +239,64 @@ const links = [
   const nav = document.getElementById("navbar");
   const toggle = document.getElementById("navToggle");
   const menu = document.getElementById("navMenu");
+  const indicator = menu?.querySelector<HTMLElement>(".nav-indicator");
+  const linkEls = [...(menu?.querySelectorAll<HTMLElement>(".nav-link") ?? [])];
 
+  // ── Menú móvil ──
   const setOpen = (open: boolean) => {
     menu?.classList.toggle("open", open);
     toggle?.classList.toggle("open", open);
     toggle?.setAttribute("aria-expanded", String(open));
   };
-
   toggle?.addEventListener("click", () => setOpen(!menu?.classList.contains("open")));
-  menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+  linkEls.forEach((l) => l.addEventListener("click", () => setOpen(false)));
 
+  // ── Sombra al hacer scroll ──
   const onScroll = () => nav?.classList.toggle("scrolled", window.scrollY > 8);
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
+
+  // ── Palito de caramelo deslizante ──
+  let activeEl: HTMLElement | null = menu?.querySelector(".nav-link.active") ?? null;
+
+  const place = (el: HTMLElement | null) => {
+    if (!el || !indicator || !menu) return;
+    const nr = menu.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    indicator.style.width = `${r.width}px`;
+    indicator.style.transform = `translateX(${r.left - nr.left}px)`;
+    indicator.style.opacity = "1";
+  };
+  const reset = () => {
+    if (activeEl) place(activeEl);
+    else if (indicator) indicator.style.opacity = "0";
+  };
+
+  linkEls.forEach((l) => l.addEventListener("mouseenter", () => place(l)));
+  menu?.addEventListener("mouseleave", reset);
+
+  // scroll-spy: secciones presentes en esta página
+  const spy = linkEls
+    .map((l) => {
+      const m = (l.getAttribute("href") || "").match(/#(.+)$/);
+      const sec = m ? document.getElementById(m[1]) : null;
+      return sec ? { l, sec } : null;
+    })
+    .filter((x): x is { l: HTMLElement; sec: HTMLElement } => x !== null);
+
+  const onSpy = () => {
+    if (!spy.length) return;
+    const y = window.scrollY + 110;
+    let cur: HTMLElement | null = null;
+    for (const s of spy) if (s.sec.offsetTop <= y) cur = s.l;
+    activeEl = cur ?? (menu?.querySelector(".nav-link.active") ?? null);
+    if (!menu?.matches(":hover")) reset();
+  };
+
+  if (spy.length) {
+    onSpy();
+    window.addEventListener("scroll", onSpy, { passive: true });
+  }
+  requestAnimationFrame(reset);
+  window.addEventListener("resize", reset);
 </script>
