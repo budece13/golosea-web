@@ -84,55 +84,84 @@ import { content, business, images, heroSlides } from "../data/golosea";
     </div>
     <div class="container encargos-wrap">
       <div class="encargos-head">
-        <h2>Encarga tu <span>cucurucho de chuches</span></h2>
+        <span class="encargos-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m9.5 7.5-2 2a4.95 4.95 0 1 0 7 7l2-2a4.95 4.95 0 1 0-7-7Z" />
+            <path d="M14 6.5v10" /><path d="M10 7.5v10" />
+            <path d="m16 7 1-5 1.37.68A3 3 0 0 0 19.7 3H21v1.3c0 .46.1.92.32 1.33L22 7l-5 1" />
+            <path d="m8 17-1 5-1.37-.68A3 3 0 0 0 4.3 21H3v-1.3a3 3 0 0 0-.32-1.33L2 17l5-1" />
+          </svg>
+          Encargos a tu gusto
+        </span>
+        <h2>Encarga tu <span class="hl">cucurucho de chuches</span></h2>
         <p class="encargos-sub">
           Perfectos para cumpleaños y fiestas infantiles. Rellena el formulario
           y te confirmamos el pedido al instante por WhatsApp.
         </p>
       </div>
 
-      <form id="encargoForm" class="encargo-form" data-wa={business.whatsapp}>
-        <div class="ef-field">
-          <label for="ef-nombre">Nombre</label>
-          <input id="ef-nombre" name="nombre" type="text" autocomplete="name" required />
-        </div>
+      <div class="form-shell">
+        <form id="encargoForm" class="encargo-form" data-wa={business.whatsapp}>
+          <div class="ef-field ef-full">
+            <label for="ef-nombre">
+              <svg class="ef-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" /></svg>
+              Nombre
+            </label>
+            <input id="ef-nombre" name="nombre" type="text" autocomplete="name" placeholder="Tu nombre" required />
+          </div>
 
-        <div class="ef-field">
-          <label for="ef-email">Correo electrónico <span class="ef-opt">(opcional)</span></label>
-          <input id="ef-email" name="email" type="email" autocomplete="email" placeholder="tucorreo@email.com" />
-        </div>
+          <div class="ef-field">
+            <label for="ef-cantidad">
+              <svg class="ef-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18" /></svg>
+              Cantidad
+            </label>
+            <input id="ef-cantidad" name="cantidad" type="number" min="1" inputmode="numeric" placeholder="Ej. 12" required />
+          </div>
 
-        <div class="ef-field">
-          <label for="ef-cantidad">Cantidad de cucuruchos</label>
-          <input id="ef-cantidad" name="cantidad" type="number" min="1" inputmode="numeric" placeholder="Ej. 12" required />
-        </div>
+          <div class="ef-field">
+            <label for="ef-email">
+              <svg class="ef-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
+              Correo <span class="ef-opt">(opcional)</span>
+            </label>
+            <input id="ef-email" name="email" type="email" autocomplete="email" placeholder="tucorreo@email.com" />
+          </div>
 
-        <div class="ef-field">
-          <label for="ef-dia">Día de recogida</label>
-          <input id="ef-dia" name="dia" type="date" required />
-          <small class="ef-hint">Mínimo 3 días de antelación</small>
-        </div>
+          <div class="ef-field">
+            <label for="ef-dia">
+              <svg class="ef-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M3 10h18M8 2v4M16 2v4" /></svg>
+              Día de recogida
+            </label>
+            <input id="ef-dia" name="dia" type="date" required />
+            <small class="ef-hint">Mínimo 3 días de antelación</small>
+          </div>
 
-        <div class="ef-field">
-          <label for="ef-hora">Hora de recogida</label>
-          <input id="ef-hora" name="hora" type="time" required />
-        </div>
+          <div class="ef-field">
+            <label for="ef-hora">
+              <svg class="ef-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7.5V12l3 2" /></svg>
+              Hora de recogida
+            </label>
+            <input id="ef-hora" name="hora" type="time" required />
+          </div>
 
-        <div class="ef-field ef-full">
-          <label for="ef-comentarios">Comentarios <span class="ef-opt">(opcional)</span></label>
-          <textarea id="ef-comentarios" name="comentarios" rows="3" placeholder="Colores, temática, alergias, número de niños..."></textarea>
-        </div>
+          <div class="ef-field ef-full">
+            <label for="ef-comentarios">
+              <svg class="ef-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+              Comentarios <span class="ef-opt">(opcional)</span>
+            </label>
+            <textarea id="ef-comentarios" name="comentarios" rows="3" placeholder="Colores, temática, alergias, número de niños..."></textarea>
+          </div>
 
-        <div class="ef-full ef-actions">
-          <button type="submit" class="btn btn--whatsapp">
+          <div class="ef-full ef-actions">
+            <button type="submit" class="btn btn--whatsapp">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-1.044zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
             </svg>
             Pedir por WhatsApp
           </button>
-          <p class="ef-msg" id="efMsg" role="alert" aria-live="polite"></p>
-        </div>
-      </form>
+            <p class="ef-msg" id="efMsg" role="alert" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
     </div>
   </section>
 
@@ -744,82 +773,154 @@ import { content, business, images, heroSlides } from "../data/golosea";
     .encargos-bg-inner { animation: none; }
   }
 
-  .encargos-head { text-align: center; margin-bottom: 34px; }
-  .encargos-head .eyebrow {
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 700;
-    font-size: 0.8rem;
-    color: var(--color-primary);
-    margin-bottom: 10px;
+  /* Placa de cristal esmerilado: difumina el fondo y hace el texto nítido */
+  .encargos-head {
+    text-align: center;
+    margin: 0 auto 30px;
+    max-width: 620px;
+    padding: 26px 32px 30px;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.6);
+    -webkit-backdrop-filter: blur(14px) saturate(1.15);
+    backdrop-filter: blur(14px) saturate(1.15);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 12px 38px rgba(28, 69, 50, 0.12);
   }
+
+  /* Badge frosted (legible sobre cualquier fondo) */
+  .encargos-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px 7px 12px;
+    margin-bottom: 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(232, 69, 90, 0.28);
+    color: var(--color-primary);
+    font-family: var(--font-subheading);
+    font-weight: 600;
+    font-size: 0.82rem;
+    letter-spacing: 0.3px;
+    box-shadow: 0 6px 18px rgba(232, 69, 90, 0.16);
+  }
+  .encargos-badge svg { width: 18px; height: 18px; }
+
   .encargos-head h2 {
-    font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+    font-size: clamp(1.8rem, 4.6vw, 2.7rem);
     color: var(--color-dark);
   }
-  .encargos-head h2 span { color: var(--color-primary); }
+  .encargos-head h2 .hl {
+    position: relative;
+    color: var(--color-primary);
+    white-space: nowrap;
+  }
+  /* subrayado "bastón de caramelo" */
+  .encargos-head h2 .hl::after {
+    content: "";
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    bottom: -7px;
+    height: 7px;
+    border-radius: 999px;
+    background: repeating-linear-gradient(45deg, var(--color-primary) 0 7px, #fff 7px 14px);
+    box-shadow: 0 3px 8px rgba(232, 69, 90, 0.4);
+    animation: candyFlow 0.9s linear infinite;
+  }
+  @keyframes candyFlow { to { background-position: 20px 0; } }
+
   .encargos-sub {
     max-width: 520px;
-    margin: 14px auto 0;
-    color: #5b5b5b;
+    margin: 16px auto 0;
+    color: #3d3d3d;
     line-height: 1.6;
   }
+
+  /* ── Marco "bastón de caramelo" del formulario ── */
+  .form-shell {
+    position: relative;
+    padding: 5px;
+    border-radius: 30px;
+    background: repeating-linear-gradient(45deg, var(--color-primary) 0 11px, #fff 11px 22px);
+    box-shadow:
+      0 22px 60px rgba(28, 69, 50, 0.16),
+      0 4px 14px rgba(232, 69, 90, 0.18);
+    animation: candyFlowShell 2.6s linear infinite;
+  }
+  @keyframes candyFlowShell { to { background-position: 31px 0; } }
 
   .encargo-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 18px 20px;
+    gap: 18px;
     background: #fff;
-    border: 1px solid #f1e7e4;
-    border-radius: 22px;
-    padding: 32px;
-    box-shadow: 0 18px 50px rgba(28, 69, 50, 0.07);
+    border-radius: 25px;
+    padding: 30px 28px 32px;
   }
-  .ef-field { display: flex; flex-direction: column; gap: 7px; }
+  .ef-field { display: flex; flex-direction: column; gap: 8px; }
   .ef-full { grid-column: 1 / -1; }
 
   .ef-field label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-subheading);
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.86rem;
     color: var(--color-dark);
   }
-  .ef-opt { font-weight: 400; color: #9a9a9a; }
+  .ef-ico { width: 17px; height: 17px; color: var(--color-primary); flex-shrink: 0; }
+  .ef-opt { font-weight: 500; color: #b0a8a6; font-size: 0.82em; }
 
   .ef-field input,
   .ef-field textarea {
     width: 100%;
-    padding: 12px 14px;
-    border: 1.5px solid #e7dedb;
-    border-radius: 12px;
+    padding: 13px 15px;
+    border: 1.6px solid #f0e0e1;
+    border-radius: 14px;
     font-family: var(--font-body);
     font-size: 1rem;
+    font-weight: 500;
     color: var(--color-dark);
-    background: #fff;
+    background: #fff8f8;
     outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
   }
+  .ef-field input::placeholder,
+  .ef-field textarea::placeholder { color: #c8bdbc; font-weight: 400; }
+  .ef-field input:hover,
+  .ef-field textarea:hover { border-color: #ecccd0; }
   .ef-field input:focus,
   .ef-field textarea:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(232, 69, 90, 0.12);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(232, 69, 90, 0.13);
   }
-  .ef-field textarea { resize: vertical; min-height: 82px; }
-  .ef-hint { font-size: 0.78rem; color: #9a9a9a; }
+  .ef-field textarea { resize: vertical; min-height: 84px; }
+  .ef-hint { font-size: 0.76rem; color: var(--color-accent-dark); font-weight: 600; }
 
   .ef-actions {
     display: flex;
     align-items: center;
     gap: 16px;
     flex-wrap: wrap;
-    margin-top: 4px;
+    margin-top: 6px;
   }
 
-  .ef-msg { font-size: 0.92rem; min-height: 1.2em; margin: 0; }
-  .ef-msg.ok { color: #1a8a3f; }
+  .ef-msg { font-size: 0.92rem; min-height: 1.2em; margin: 0; font-weight: 600; }
+  .ef-msg.ok { color: var(--color-accent-dark); }
   .ef-msg.err { color: #c0322b; }
 
+  @media (prefers-reduced-motion: reduce) {
+    .encargos-head h2 .hl::after,
+    .form-shell { animation: none; }
+  }
+
   @media (max-width: 600px) {
-    .encargo-form { grid-template-columns: 1fr; padding: 22px; }
+    .encargo-form { grid-template-columns: 1fr; padding: 22px 18px; }
   }
 
   /* ── VISITAS DEL MES ── */
