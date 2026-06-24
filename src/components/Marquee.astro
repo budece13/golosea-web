@@ -1,0 +1,93 @@
+---
+interface Props {
+  text: string;
+  direction?: "left" | "right";
+  variant?: "red" | "green";
+  duration?: number; // segundos por ciclo (más alto = más lento)
+}
+const { text, direction = "left", variant = "red", duration = 22 } = Astro.props;
+const REPEAT = 6;
+---
+
+<div class:list={["marquee", `marquee--${variant}`]} aria-label={text}>
+  <div
+    class:list={["marquee-track", { reverse: direction === "right" }]}
+    style={`--dur:${duration}s`}
+    aria-hidden="true"
+  >
+    {[0, 1].map(() => (
+      <div class="marquee-group">
+        {Array.from({ length: REPEAT }).map(() => <span>{text}</span>)}
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .marquee {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marqueeMove var(--dur, 22s) linear infinite;
+    will-change: transform;
+  }
+  .marquee-track.reverse { animation-direction: reverse; }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+
+  .marquee-group { display: flex; }
+
+  .marquee span {
+    display: block;
+    white-space: nowrap;
+    font-family: var(--font-heading);
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: clamp(1.25rem, 3.2vw, 2rem);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    padding: 13px 0;
+  }
+  .marquee span::after {
+    content: "🍬";
+    margin: 0 1.35rem;
+    font-size: 0.82em;
+    vertical-align: middle;
+  }
+
+  @keyframes marqueeMove {
+    to { transform: translateX(-50%); }
+  }
+
+  .marquee--red {
+    background: var(--color-primary);
+    color: #fff;
+  }
+  .marquee--green {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+  }
+</style>
+
+<script>
+  // Iguala la velocidad (px/s) de todas las franjas, sin importar el largo
+  // del texto: ajusta la duración según el ancho real de cada una.
+  const SPEED = 62; // px por segundo
+  const fit = () => {
+    document.querySelectorAll<HTMLElement>(".marquee-track").forEach((t) => {
+      const group = t.scrollWidth / 2; // hay 2 grupos idénticos
+      if (group > 0) t.style.setProperty("--dur", (group / SPEED).toFixed(2) + "s");
+    });
+  };
+  fit();
+  window.addEventListener("resize", fit);
+  if (document.fonts?.ready) document.fonts.ready.then(fit);
+</script>
