@@ -16,25 +16,19 @@ const links = [
 <header class="navbar" id="navbar">
   <div class="container nav-inner">
     <a href="/" class="brand" aria-label={`${business.name} — inicio`}>
-      <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="m9.5 7.5-2 2a4.95 4.95 0 1 0 7 7l2-2a4.95 4.95 0 1 0-7-7Z" />
-        <path d="M14 6.5v10" /><path d="M10 7.5v10" />
-        <path d="m16 7 1-5 1.37.68A3 3 0 0 0 19.7 3H21v1.3c0 .46.1.92.32 1.33L22 7l-5 1" />
-        <path d="m8 17-1 5-1.37-.68A3 3 0 0 0 4.3 21H3v-1.3a3 3 0 0 0-.32-1.33L2 17l5-1" />
-      </svg>
-      <span>{business.name}</span>
+      <img src="/logo/golosea-logo.png" alt={business.name} class="brand-logo" width="160" height="48" />
     </a>
 
     <nav class="nav-links" id="navMenu" aria-label="Principal">
       {links.map((l) => (
         <a href={l.href} class:list={["nav-link", { active: l.href === path }]}>{l.label}</a>
       ))}
-      <a href="/#encargos" class="nav-cta-mob">{content.cta_text}</a>
+      <a href="/#encargos" class="btn btn--primary nav-cta-mob">{content.cta_text}</a>
       <span class="nav-indicator" aria-hidden="true"></span>
     </nav>
 
     <div class="nav-right">
-      <a href="/#encargos" class="nav-cta">{content.cta_text}</a>
+      <a href="/#encargos" class="btn btn--primary btn--sm nav-cta">{content.cta_text}</a>
       <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navMenu">
         <span></span><span></span><span></span>
       </button>
@@ -44,46 +38,60 @@ const links = [
 
 <style>
   .navbar {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 50;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(15, 59, 42, 0.08);
-    transition: box-shadow 0.25s ease, background 0.25s ease;
+    padding: 14px 0;
+    background: transparent;
+    transition: padding 0.25s ease;
   }
   .navbar.scrolled {
-    background: rgba(255, 255, 255, 0.94);
-    box-shadow: 0 4px 20px rgba(15, 59, 42, 0.08);
+    padding: 8px 0;
   }
 
+  /* Píldora flotante con efecto glass */
   .nav-inner {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 70px;
+    height: 64px;
+    padding: 0 14px 0 20px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+      0 8px 30px rgba(15, 59, 42, 0.1),
+      inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    transition: background 0.25s ease, box-shadow 0.25s ease;
+  }
+  .navbar.scrolled .nav-inner {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow:
+      0 10px 34px rgba(15, 59, 42, 0.16),
+      inset 0 1px 1px rgba(255, 255, 255, 0.7);
   }
 
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 1.4rem;
-    color: var(--color-primary);
     flex-shrink: 0;
   }
-  .brand-mark { width: 25px; height: 25px; }
+  .brand-logo {
+    height: 44px;
+    width: auto;
+  }
 
   /* Links centrados en la pantalla (absolutos respecto a la barra) */
   .nav-links {
     position: absolute;
     left: 50%;
     top: 0;
-    height: 70px;
+    height: 64px;
     transform: translateX(-50%);
     display: flex;
     align-items: center;
@@ -129,23 +137,7 @@ const links = [
     gap: 10px;
     margin-left: auto;
   }
-  .nav-cta {
-    background: var(--color-primary);
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    box-shadow: 0 5px 14px rgba(232, 69, 90, 0.25);
-    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-  }
-  .nav-cta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 9px 20px rgba(232, 69, 90, 0.34);
-    background: var(--color-primary-dark);
-  }
-  .nav-cta:active { transform: translateY(0); }
+  .nav-cta { white-space: nowrap; }
   .nav-cta-mob { display: none; }
 
   .nav-toggle {
@@ -218,14 +210,8 @@ const links = [
     }
     .nav-link.active { background: var(--color-light); }
     .nav-cta-mob {
-      display: block;
+      display: inline-flex;
       margin: 12px 1.5rem 4px;
-      text-align: center;
-      background: var(--color-primary);
-      color: #fff;
-      padding: 13px 20px;
-      border-radius: 999px;
-      font-weight: 700;
     }
   }
 

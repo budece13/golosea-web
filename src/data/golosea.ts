@@ -6,7 +6,7 @@ export const business = {
   phone: "662 595 342",
   whatsapp: "34662595342",
   mapsEmbed:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3094.0!2d-2.5153!3d38.9575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sGolosea!5e0!3m2!1ses!2ses!4v1700000000000",
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4476.481698437953!2d-2.5391421!3d38.9506644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd68a150a580ab63%3A0x88e0f2d1ab353cec!2sGolosea!5e1!3m2!1ses!2ses!4v1782271968647!5m2!1ses!2ses",
   rating: 4.9,
   ratingsCount: 87,
 } as const;
@@ -110,8 +110,8 @@ export const palette = {
 } as const;
 
 export const fonts = {
-  heading:    "Ranchers", // titular principal (solo peso 400)
-  subheading: "Fredoka",  // subtitulos y headings secundarios
+  heading:    "Erica One", // titular principal (solo peso 400)
+  subheading: "Baloo 2",  // subtitulos y headings secundarios
   body:       "Nunito",   // texto
 } as const;
 
