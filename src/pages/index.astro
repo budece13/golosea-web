@@ -8,6 +8,12 @@
 
 import Layout from "../layouts/Layout.astro";
 import { content, business, images, heroSlides } from "../data/golosea";
+
+// Enlace para dejar reseña. Cuando tengáis el Place ID de Google, cambiadlo por
+// https://search.google.com/local/writereview?placeid=XXXX  (lleva directo a escribir).
+const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  `${business.name} ${business.zona}`,
+)}`;
 ---
 
 <Layout>
@@ -179,20 +185,25 @@ import { content, business, images, heroSlides } from "../data/golosea";
   <!-- ═══════════════════════════════════════════
        RESEÑAS
   ═══════════════════════════════════════════ -->
-  <section id="resenas" class="section testimonials-section">
+  <section id="resenas" class="section reviews-section">
     <div class="container">
-      <div class="section-title">
-        <h2 style="color:#fff">Lo que dicen nuestros <span>clientes</span></h2>
-      </div>
-      <div class="testimonials-grid">
-        {content.testimonials.map((t) => (
-          <figure class="testimonial">
-            <blockquote>"{t.text}"</blockquote>
-            <figcaption>
-              — {t.name} <span class="stars">★★★★★</span>
-            </figcaption>
-          </figure>
-        ))}
+      <div class="review-cta">
+        <div class="review-stars" aria-hidden="true">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <h2>¿Te has endulzado con <span class="rc-brand">Golosea</span>?</h2>
+        <p class="review-lead">
+          Tu opinión nos endulza el día y anima a otros golosos a descubrirnos.
+          Cuéntale al mundo cuál es tu chuche favorita en una reseña: ¡solo te
+          llevará un minuto!
+        </p>
+        <a href={reviewUrl} target="_blank" rel="noopener noreferrer" class="btn btn--primary review-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
+          </svg>
+          Déjanos tu reseña
+        </a>
+        <p class="review-foot">Nos encantará leerte 🍬</p>
       </div>
     </div>
   </section>
@@ -646,41 +657,105 @@ import { content, business, images, heroSlides } from "../data/golosea";
   }
 
   /* ── TESTIMONIOS ── */
-  .testimonials-section {
+  /* ── RESEÑAS (CTA para dejar reseña) ── */
+  .reviews-section {
     position: relative;
     z-index: 1;
+    overflow: hidden;
     background: var(--color-dark);
   }
-
-  .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
+  /* halos de color (sandía + verde) detrás del card */
+  .reviews-section::before,
+  .reviews-section::after {
+    content: "";
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(20px);
+  }
+  .reviews-section::before {
+    top: -160px;
+    left: 50%;
+    transform: translateX(-60%);
+    background: radial-gradient(circle, rgba(232, 69, 90, 0.22), transparent 68%);
+  }
+  .reviews-section::after {
+    bottom: -200px;
+    right: 50%;
+    transform: translateX(60%);
+    background: radial-gradient(circle, rgba(24, 178, 76, 0.18), transparent 68%);
   }
 
-  .testimonial {
-    background: rgba(255, 255, 255, 0.06);
-    padding: 28px;
-    border-radius: 16px;
+  .review-cta {
+    position: relative;
+    max-width: 660px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 50px 44px;
+    border-radius: 30px;
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.32);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
   }
 
-  .testimonial blockquote {
-    font-size: 1.05rem;
+  .review-stars {
+    font-size: 2.5rem;
+    letter-spacing: 8px;
+    margin-bottom: 18px;
+    line-height: 1;
+  }
+  .review-stars span {
+    display: inline-block;
+    color: #ffc93c;
+    filter: drop-shadow(0 4px 10px rgba(255, 201, 60, 0.45));
+    animation: starPop 2.6s ease-in-out infinite;
+  }
+  .review-stars span:nth-child(2) { animation-delay: 0.12s; }
+  .review-stars span:nth-child(3) { animation-delay: 0.24s; }
+  .review-stars span:nth-child(4) { animation-delay: 0.36s; }
+  .review-stars span:nth-child(5) { animation-delay: 0.48s; }
+  @keyframes starPop {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-5px) scale(1.14); }
+  }
+
+  .review-cta h2 {
+    font-size: clamp(1.7rem, 4.4vw, 2.5rem);
     color: #fff;
     margin-bottom: 14px;
-    font-style: italic;
-    line-height: 1.6;
+  }
+  .review-cta h2 .rc-brand { color: var(--color-primary); }
+
+  .review-lead {
+    max-width: 500px;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.65;
+    font-size: 1.04rem;
   }
 
-  .testimonial figcaption {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #fff;
+  .review-btn {
+    margin-top: 28px;
+    font-size: 1.05rem;
+    padding: 15px 32px;
   }
 
-  .stars {
-    color: var(--color-accent);
-    margin-left: 6px;
+  .review-foot {
+    margin-top: 16px;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.92rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .review-stars span { animation: none; }
+  }
+
+  @media (max-width: 600px) {
+    .review-cta { padding: 38px 24px; }
   }
 
   /* ── MAPA + contacto ── */
