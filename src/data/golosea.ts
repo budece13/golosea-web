@@ -125,9 +125,14 @@ export const images = {
     alt: "Decorando dulces con virutas de colores",
   },
   gallery: [
-    { url: "https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Brownies de chocolate" },
-    { url: "https://images.pexels.com/photos/3625372/pexels-photo-3625372.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Batido rosa de fresa" },
-    { url: "https://images.pexels.com/photos/7474270/pexels-photo-7474270.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Merengues artesanos" },
+    { url: "/images/galeria-1.webp", alt: "Surtido de chuches de Golosea" },
+    { url: "/images/galeria-2.webp", alt: "Golosinas variadas de Golosea" },
+    { url: "/images/galeria-3.webp", alt: "Chucherías de Golosea" },
+    { url: "/images/galeria-4.webp", alt: "Dulces y golosinas de Golosea" },
+    { url: "/images/galeria-5.webp", alt: "Snacks y chuches de Golosea" },
+    { url: "/images/galeria-6.webp", alt: "Selección de golosinas de Golosea" },
+    { url: "/images/galeria-7.webp", alt: "Chuches para fiestas de Golosea" },
+    { url: "/images/galeria-8.webp", alt: "Productos de Golosea" },
   ],
 } as const;
 
