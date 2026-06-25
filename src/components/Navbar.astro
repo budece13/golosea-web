@@ -215,6 +215,19 @@ const links = [
     }
   }
 
+  /* ── Móvil: barra más fina y con margen a los lados ── */
+  @media (max-width: 600px) {
+    .navbar { padding: 10px 12px; }
+    .navbar.scrolled { padding: 6px 12px; }
+    .nav-inner {
+      height: 52px;
+      padding: 0 10px 0 14px;
+    }
+    .brand-logo { height: 34px; }
+    .nav-toggle { width: 40px; height: 40px; }
+    .nav-links { top: calc(100% + 8px); border-radius: 18px; overflow: hidden; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .navbar, .nav-link, .nav-cta, .nav-toggle span, .nav-links { transition: none; }
     .nav-indicator { animation: none; transition: opacity 0.2s ease; }

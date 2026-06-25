@@ -108,6 +108,22 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
       </div>
 
       <div class="form-shell">
+        <img
+          class="form-cucurucho form-cucurucho--right"
+          src="/secciones/cucurucho-final.png"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          class="form-cucurucho form-cucurucho--left"
+          src="/secciones/cucurucho-final.png"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
         <form id="encargoForm" class="encargo-form" data-wa={business.whatsapp}>
           <div class="ef-field ef-full">
             <label for="ef-nombre">
@@ -183,11 +199,21 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
   <!-- ═══════════════════════════════════════════
        GALERÍA
   ═══════════════════════════════════════════ -->
-  <section id="galeria" class="gallery-section">
-    <div class="gallery-grid">
-      {images.gallery.map((img) => (
-        <img src={img.url} alt={img.alt} loading="lazy" />
-      ))}
+  <section id="galeria" class="section gallery-section">
+    <div class="container">
+      <div class="gallery-head">
+        <span class="gallery-eyebrow">Nuestra galería</span>
+        <h2>Un vistazo a nuestras <span class="hl">chuches</span></h2>
+        <p class="gallery-sub">
+          Cucuruchos, mesas dulces y rincones llenos de color. Échale un ojo
+          a algunas de nuestras creaciones favoritas.
+        </p>
+      </div>
+      <div class="gallery-grid">
+        {images.gallery.map((img) => (
+          <img src={img.url} alt={img.alt} loading="lazy" />
+        ))}
+      </div>
     </div>
   </section>
 
@@ -223,7 +249,9 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
   <section id="mapa" class="section map-section">
     <div class="container">
       <div class="section-title">
+        <span class="section-eyebrow">Visítanos</span>
         <h2>Dónde <span>estamos</span></h2>
+        <p class="section-sub">Una esquina con historia en el centro del pueblo</p>
       </div>
       <div class="map-grid">
         <iframe
@@ -234,11 +262,13 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
           title="Ubicación de Golosea en el mapa"
         ></iframe>
         <div class="contact-info">
-          <h3>{business.name}</h3>
-          <p><span class="ci-label">📍</span> {business.address}</p>
-          <p><span class="ci-label">📞</span> <a href={`tel:${business.phone.replace(/\s/g,"")}`}>{business.phone}</a></p>
-          <p><span class="ci-label">⭐</span> {business.rating} / 5 ({business.ratingsCount} reseñas)</p>
-          <p class="contact-hint">Martes a domingo, mañana y tarde · Lunes cerrado.</p>
+          <h3>Ver a vernos!</h3>
+          <ul class="ci-list">
+            <li><span class="ci-label">📍</span> <span>{business.address}</span></li>
+            <li><span class="ci-label">📞</span> <a href={`tel:${business.phone.replace(/\s/g,"")}`}>{business.phone}</a></li>
+            <li><span class="ci-label">⭐</span> <span>{business.rating} / 5 ({business.ratingsCount} reseñas)</span></li>
+            <li><span class="ci-label">🕑</span> <span>Martes a domingo, mañana y tarde · Lunes cerrado.</span></li>
+          </ul>
           <a href="#encargos" class="btn btn--primary">Hacer un encargo</a>
         </div>
       </div>
@@ -406,6 +436,23 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
 
   .section-title span {
     color: var(--color-primary);
+  }
+  .section-eyebrow {
+    display: inline-block;
+    margin-bottom: 12px;
+    font-family: var(--font-subheading);
+    font-weight: 600;
+    font-size: 0.82rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+  .section-sub {
+    max-width: 540px;
+    margin: 12px auto 0;
+    color: #6b635f;
+    font-size: 1.02rem;
+    line-height: 1.6;
   }
 
   /* ── HERO (poster slideshow) ── */
@@ -636,9 +683,9 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
   }
 
   @media (max-width: 860px) {
-    .hero { min-height: 92vh; }
+    .hero { min-height: 100vh; min-height: 100svh; }
     .hero-title {
-      top: 15%;
+      top: 19%;
       font-size: clamp(1.7rem, 8.5vw, 3.4rem);
     }
     .product { max-height: 44%; max-width: 78%; top: 50%; }
@@ -677,20 +724,51 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
     overflow: hidden;
   }
 
+  .gallery-head {
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 38px;
+  }
+  .gallery-eyebrow {
+    display: inline-block;
+    margin-bottom: 12px;
+    font-family: var(--font-subheading);
+    font-weight: 600;
+    font-size: 0.82rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+  .gallery-head h2 {
+    font-size: clamp(1.8rem, 4.6vw, 2.7rem);
+    color: var(--color-dark);
+  }
+  .gallery-head h2 .hl { color: var(--color-primary); }
+  .gallery-sub {
+    margin-top: 12px;
+    color: #6b635f;
+    font-size: 1.02rem;
+    line-height: 1.6;
+  }
+
   .gallery-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
   }
 
   .gallery-grid img {
-    height: 260px;
+    height: 280px;
     width: 100%;
     object-fit: cover;
-    transition: transform 0.4s;
+    border-radius: 20px;
+    box-shadow: 0 10px 28px rgba(28, 69, 50, 0.12);
+    transition: transform 0.4s, box-shadow 0.4s;
   }
 
   .gallery-grid img:hover {
-    transform: scale(1.04);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 18px 40px rgba(28, 69, 50, 0.18);
   }
 
   /* ── TESTIMONIOS ── */
@@ -814,36 +892,60 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
     height: 100%;
     min-height: 380px;
     border: 0;
-    border-radius: 18px;
+    border-radius: 22px;
+    box-shadow: 0 16px 40px rgba(28, 69, 50, 0.16);
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 32px 30px;
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 16px 40px rgba(28, 69, 50, 0.1);
   }
 
   .contact-info h3 {
-    font-size: 1.4rem;
-    color: var(--color-dark);
-    margin-bottom: 16px;
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    color: var(--color-primary);
+    margin-bottom: 20px;
   }
 
-  .contact-info p {
-    margin-bottom: 10px;
-    color: #444;
-    line-height: 1.5;
+  .ci-list {
+    list-style: none;
+    margin: 0 0 22px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .ci-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: #4a443f;
+    line-height: 1.45;
   }
 
   .ci-label {
-    font-weight: 700;
-    color: var(--color-dark);
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: var(--color-light);
+    font-size: 0.95rem;
   }
 
-  .contact-info p a {
+  .ci-list a {
     color: var(--color-primary);
     font-weight: 600;
   }
-
-  .contact-hint {
-    margin: 14px 0 16px;
-    color: #666;
-    font-style: italic;
-  }
+  .contact-info .btn { align-self: flex-start; }
 
   /* ── ENCARGOS (formulario -> WhatsApp) ── */
   .encargos-section {
@@ -872,7 +974,23 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
   .encargos-bg-inner {
     position: absolute;
     inset: 0;
+  }
+  /* Capa base (::before): fondo difuminado solo visible en los bordes */
+  .encargos-bg-inner::before,
+  .encargos-bg-inner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
     background: url("/secciones/chuches-marco.webp") center / cover no-repeat;
+  }
+  .encargos-bg-inner::before {
+    filter: blur(5px);
+    transform: scale(1.05); /* evita bordes transparentes por el blur */
+  }
+  /* Capa nítida (::after): solo en el centro, deja borrosos únicamente los bordes */
+  .encargos-bg-inner::after {
+    -webkit-mask-image: radial-gradient(ellipse 80% 75% at center, #000 0%, #000 55%, transparent 92%);
+    mask-image: radial-gradient(ellipse 80% 75% at center, #000 0%, #000 55%, transparent 92%);
   }
   /* Sin movimiento extra: el ascensor ya lo gobierna el scroll */
   @media (prefers-reduced-motion: reduce) {
@@ -923,21 +1041,7 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
     color: var(--color-primary);
     white-space: nowrap;
   }
-  /* subrayado "bastón de caramelo" */
-  .encargos-head h2 .hl::after {
-    content: "";
-    position: absolute;
-    left: -2px;
-    right: -2px;
-    bottom: -7px;
-    height: 7px;
-    border-radius: 999px;
-    background: repeating-linear-gradient(45deg, var(--color-primary) 0 7px, #fff 7px 14px);
-    box-shadow: 0 3px 8px rgba(232, 69, 90, 0.4);
-    animation: candyFlow 0.9s linear infinite;
-  }
-  @keyframes candyFlow { to { background-position: 20px 0; } }
-
+  
   .encargos-sub {
     max-width: 520px;
     margin: 16px auto 0;
@@ -957,6 +1061,45 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
     animation: candyFlowShell 2.6s linear infinite;
   }
   @keyframes candyFlowShell { to { background-position: 31px 0; } }
+
+  /* Cucurucho que asoma desde el borde de la tarjeta al enfocar un campo */
+  .form-cucurucho {
+    position: absolute;
+    height: auto;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    filter: drop-shadow(0 18px 28px rgba(28, 69, 50, 0.26));
+    transition:
+      transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+      opacity 0.42s ease;
+  }
+
+  /* Derecha: asoma por la esquina superior-derecha */
+  .form-cucurucho--right {
+    top: 100px;
+    right: -120px;
+    width: clamp(180px, 22vw, 250px);
+    transform-origin: 80% 100%;
+    transform: translate(-16px, 70px) rotate(-26deg) scale(0.72);
+  }
+  .form-shell:focus-within .form-cucurucho--right {
+    transform: translate(85px, -55%) rotate(14deg) scale(1);
+    opacity: 1;
+  }
+
+  /* Izquierda: en espejo, más abajo y un poco más pequeño */
+  .form-cucurucho--left {
+    bottom: 50px;
+    left: 20px;
+    width: clamp(120px, 18vw, 205px);
+    transform-origin: 20% 100%;
+    transform: scaleX(-1) translate(-16px, 60px) rotate(-20deg) scale(0.7);
+  }
+  .form-shell:focus-within .form-cucurucho--left {
+    transform: scaleX(-1) translate(95px, -10%) rotate(16deg) scale(1);
+    opacity: 1;
+  }
 
   .encargo-form {
     display: grid;
@@ -1023,6 +1166,9 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
   @media (prefers-reduced-motion: reduce) {
     .encargos-head h2 .hl::after,
     .form-shell { animation: none; }
+    .form-cucurucho { transition: opacity 0.3s ease; }
+    .form-cucurucho--right { transform: translate(80px, -50%) rotate(12deg) scale(1); }
+    .form-cucurucho--left { transform: scaleX(-1) translate(85px, -8%) rotate(14deg) scale(1); }
   }
 
   @media (max-width: 600px) {
@@ -1033,10 +1179,27 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
   .visits-section {
     position: relative;
     z-index: 1;
-    background: var(--color-dark);
+    overflow: hidden;
+    background:
+      radial-gradient(120% 140% at 50% -20%, rgba(232, 69, 90, 0.35), transparent 60%),
+      var(--color-dark);
     color: #fff;
     text-align: center;
-    padding: 48px 0;
+    padding: 60px 0;
+  }
+
+  .visits-section .container {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 34px 48px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
   }
 
   .visits-label {
@@ -1044,21 +1207,23 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
     letter-spacing: 2px;
     font-size: 0.85rem;
     opacity: 0.8;
-    margin-bottom: 6px;
+    margin: 0;
   }
 
   .visits-count {
     font-family: var(--font-heading);
     font-weight: 800;
-    font-size: clamp(2.4rem, 7vw, 4rem);
+    font-size: clamp(2.6rem, 8vw, 4.4rem);
     color: var(--color-accent);
     line-height: 1.1;
+    margin: 0;
+    text-shadow: 0 6px 24px rgba(245, 197, 66, 0.25);
   }
 
   .visits-hint {
-    opacity: 0.75;
+    opacity: 0.8;
     font-size: 0.95rem;
-    margin-top: 4px;
+    margin: 0;
   }
 
   /* ── RESPONSIVE ── */
