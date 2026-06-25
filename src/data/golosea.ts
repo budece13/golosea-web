@@ -133,6 +133,7 @@ export const images = {
     { url: "/images/galeria-6.webp", alt: "Selección de golosinas de Golosea" },
     { url: "/images/galeria-7.webp", alt: "Chuches para fiestas de Golosea" },
     { url: "/images/galeria-8.webp", alt: "Productos de Golosea" },
+    { url: "/images/galeria-9.webp", alt: "Tienda Golosea El Bonillo" },
   ],
 } as const;
 
