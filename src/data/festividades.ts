@@ -1,9 +1,12 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Para añadir una nueva festividad:
-//   1. Copia el objeto de abajo y cámbia el slug + contenido.
+//   1. Copia el objeto de abajo y cambia el slug + contenido.
 //   2. Pon `active: true` en la nueva y `active: false` en la anterior.
-//   3. El resto de la página se adapta sola.
+//   3. Elige un `theme` (ahora mismo "manchego"; añade skins nuevos en festivos.astro).
+//   4. El resto de la página se adapta sola.
 // ─────────────────────────────────────────────────────────────────────────────
+
+export type FestTheme = "manchego" | "default";
 
 export interface OfertaItem {
   emoji: string;
@@ -20,15 +23,19 @@ export interface BeneficioItem {
 export interface Festividad {
   slug: string;
   nombre: string;              // "Alterna Festival 2026"
+  theme: FestTheme;            // skin visual de la sección
   emoji: string;               // icono representativo
-  colorHero: string;           // CSS gradient para el hero (fondo oscuro)
-  colorAccent: string;         // color destacado (para badges, bordes)
+  colorAccent: string;         // color destacado (badges, bordes)
   tagline: string;             // H1 principal — beneficio para el usuario
   subtitulo: string;           // fechas y lugar
-  descripcionFestival: string; // texto SEO explicando el festival (párrafos separados por \n)
+  descripcionFestival: string; // texto SEO sobre el festival (párrafos separados por \n)
   pitchGolosea: string;        // por qué Golosea es la parada ideal
+  precioClaim: string;         // titular del banner de precio
+  precioSub: string;           // subtítulo del banner de precio
+  cartel: string[];            // nombres del cartel (ticker). Vacío = se oculta
   oferta: OfertaItem[];        // productos/servicios especiales
-  beneficios: BeneficioItem[]; // razones para ir a Golosea
+  beneficios: BeneficioItem[]; // razones para venir a Golosea
+  imagenIntro?: { url: string; alt: string }; // foto destacada del intro (si no, usa la galería)
   galeriaSlice: [number, number]; // qué fotos de la galería mostrar [desde, hasta]
   seoTitle: string;
   seoDescription: string;
@@ -39,84 +46,107 @@ export const festividades: Festividad[] = [
   {
     slug: "alterna-2026",
     nombre: "Alterna Festival 2026",
+    theme: "manchego",
     emoji: "🎸",
-    colorHero:
-      "radial-gradient(ellipse 120% 90% at 60% 10%, #2a0a12 0%, #0F3B2A 55%, #080f0b 100%)",
     colorAccent: "#E8455A",
-    tagline: "Tu parada antes del Alterna Festival",
-    subtitulo: "🎸 XVII Edición · 3 y 4 de julio · El Bonillo, Albacete",
-    descripcionFestival: `El Alterna Festival celebra su XVII edición los días 3 y 4 de julio en El Bonillo (Albacete). Dos días de punk, rock, metal, ska y mestizaje con nombres como Boikot, Kaotiko, Soziedad Alkoholika, Benito Kamelas, Narco, Biznaga, Dubioza Kolektiv y muchos más.\nEl abono de dos días sale por 40€ e incluye zona de acampada gratuita. Eso significa campamento, previo y noches largas. Y para todo eso hace falta aprovisionarse bien antes de entrar al recinto.`,
+    tagline: "Tu avituallamiento para el Alterna Festival",
+    subtitulo: "XVII Edición · 3 y 4 de julio · La Nación, El Bonillo",
+    descripcionFestival: `El Alterna Festival celebra su XVII edición los días 3 y 4 de julio en El Bonillo (Albacete). Dos días de punk, rock, metal, ska y mestizaje con Boikot, Kaotiko, Soziedad Alkoholika, Dubioza Kolektiv, Narco, Benito Kamelas, Biznaga y muchos más, con acampada gratuita incluida en el abono.\nCampamento, la previa y noches largas en La Nación. Y pa' aguantar dos días de conciertos hace falta avituallarse bien: bebida fría, hielo de sobra y algo de picar. Eso lo tienes resuelto en Golosea antes de cruzar la puerta del recinto.`,
     pitchGolosea:
-      "Golosea está en la misma Plaza Cementerio 9 de El Bonillo, a dos minutos del recinto. Pásate a por las cervezas, el hielo y todo lo del botellón antes de que empiece el primero. Sin colas, a precio de tienda.",
+      "Golosea está en plena Plaza de El Bonillo, a un par de minutos del recinto. Pásate a por las cervezas, el alcohol, la mezcla y el hielo antes de que arranque el primer bolo. Sin colas y a precios de toa' la vida. ¡Quítate el azogue con nosotros!",
+    precioClaim: "Precio de pueblo, no de festival",
+    precioSub:
+      "Cervezas, alcohol, mezcla y hielo a lo que valen de verdad. El recargo de la barra te lo ahorras entero.",
+    cartel: [
+      "Boikot",
+      "Kaotiko",
+      "Soziedad Alkoholika",
+      "Dubioza Kolektiv",
+      "Narco",
+      "Benito Kamelas",
+      "Biznaga",
+      "La Élite",
+      "Sons of Aguirre",
+      "Sanguijuelas del Guadiana",
+      "Trashtucada",
+      "Amygdala",
+      "Parkineos",
+      "Nerve Agent",
+      "Awakate",
+    ],
     oferta: [
       {
         emoji: "🍺",
-        titulo: "Cervezas frías",
+        titulo: "Cervezas bien frías",
         descripcion:
-          "Botes y litros bien fríos para el campamento y el pre-festival. Sin hacer cola en la barra del recinto.",
+          "Botes, litronas y packs fríos pa' el campamento y la previa. Sin colas y a precio de tienda de pueblo.",
+      },
+      {
+        emoji: "🥃",
+        titulo: "Alcohol para combinados",
+        descripcion:
+          "Ron, ginebra, vodka, whisky... lo que haga falta pa' los cubatas, mucho más barato que en la barra del recinto.",
+      },
+      {
+        emoji: "🥤",
+        titulo: "Mezcla y refrescos",
+        descripcion:
+          "Coca-Cola, tónica, limón, naranja y agua bien fría. Todo para el combinado y para no deshidratarte en julio.",
       },
       {
         emoji: "🍷",
         titulo: "Tinto de verano",
         descripcion:
-          "El clásico manchego para días de calor. Tinto, gaseosa y hielo: el combo perfecto cuando aprieta julio.",
+          "El clásico manchego para el calor: vino, gaseosa y limón. Listo para la sombra y el campamento.",
       },
       {
         emoji: "🧊",
-        titulo: "Hielo",
+        titulo: "Hielo a sacos",
         descripcion:
-          "Sin hielo no hay botellón. Llévate una bolsa (o dos) para que todo llegue frío al campamento.",
-      },
-      {
-        emoji: "🥤",
-        titulo: "Refrescos y mezcladores",
-        descripcion:
-          "Coca-Cola, Fanta, agua... todo lo que necesitas para completar el botellón sin improvisar.",
+          "Bolsas de hielo para que la cerveza y los cubatas aguanten fríos toda la jornada. Imprescindible.",
       },
       {
         emoji: "🥨",
-        titulo: "Snacks salados",
+        titulo: "Snacks y picoteo",
         descripcion:
-          "Patatas, frutos secos, palomitas. El picoteo que te salva entre actuación y actuación (y de resaca).",
-      },
-      {
-        emoji: "🍬",
-        titulo: "Chuches y golosinas",
-        descripcion:
-          "Para los peques que vienen a los talleres y el Cyrcus Space, y para los que nunca dejaron de serlo.",
+          "Patatas, frutos secos, chuches y algo de picar entre concierto y concierto (y para la resaca del día siguiente).",
       },
     ],
     beneficios: [
       {
-        emoji: "📍",
-        titulo: "En el mismo pueblo",
+        emoji: "🏷️",
+        titulo: "Precio de pueblo",
         texto:
-          "Plaza Cementerio 9, El Bonillo. A dos minutos del recinto, sin desvíos ni sorpresas.",
+          "Cervezas, alcohol y hielo a precio de tienda de barrio, no de barra de festival. El ahorro se nota de verdad.",
+      },
+      {
+        emoji: "📍",
+        titulo: "A dos pasos del recinto",
+        texto:
+          "Plaza Cementerio 9, El Bonillo. En pleno pueblo, a un par de minutos de La Nación.",
       },
       {
         emoji: "⚡",
         titulo: "Rápido y sin colas",
         texto:
-          "Entra, coge lo que necesitas y en marcha. Aquí no pierdes ni cinco minutos antes de los conciertos.",
-      },
-      {
-        emoji: "💰",
-        titulo: "Precio de tienda, no de festival",
-        texto:
-          "Las cervezas y el hielo a lo que cuestan de verdad. El recargo de barra te lo ahorras.",
+          "Entras, coges la bebida y el hielo, y para el campamento. Cero esperas antes del primer concierto.",
       },
       {
         emoji: "🎒",
-        titulo: "Todo en un solo sitio",
+        titulo: "Todo en un viaje",
         texto:
-          "Bebidas, hielo, snacks y chuches. Cargues en un viaje y listo; el campamento ya está montado.",
+          "Bebida fría, mezcla, alcohol, hielo y picoteo en una sola parada. Cargas y a montar la previa.",
       },
     ],
+    imagenIntro: {
+      url: "/festivos/alterna-publico.webp",
+      alt: "Público en el Alterna Festival de El Bonillo",
+    },
     galeriaSlice: [0, 4],
     seoTitle:
-      "Alterna Festival El Bonillo 2026 | Bebidas, botellón y snacks — Golosea",
+      "Alterna Festival El Bonillo 2026 | Bebidas, hielo y botellón — Golosea",
     seoDescription:
-      "¿Vas al Alterna Festival 2026 en El Bonillo? Pásate por Golosea: cervezas frías, tinto de verano, hielo, refrescos y snacks para el botellón y el campamento. Estamos a dos pasos del recinto.",
+      "¿Vas al Alterna Festival 2026 en El Bonillo? Golosea tiene cervezas frías, alcohol, mezcla, tinto de verano, hielo y snacks a precio de pueblo. A dos pasos del recinto de La Nación.",
     active: true,
   },
 ];

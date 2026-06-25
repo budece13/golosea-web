@@ -1,0 +1,70 @@
+---
+// Molino manchego con aspas que giran. Decorativo (theme manchego).
+interface Props {
+  width?: number;   // ancho en px
+  spin?: number;    // segundos por vuelta de las aspas
+  reverse?: boolean;
+  class?: string;
+}
+const { width = 200, spin = 16, reverse = false, class: cls = "" } = Astro.props;
+const angles = [0, 90, 180, 270];
+const slats = [44, 62, 80, 98];
+const hub = { x: 100, y: 110 };
+---
+
+<svg
+  class:list={["wm", cls]}
+  style={`width:${width}px`}
+  viewBox="0 0 200 280"
+  role="img"
+  aria-label="Molino de viento manchego"
+>
+  <!-- cuerpo -->
+  <path d="M68 280 L132 280 L122 132 L78 132 Z" fill="#fdfaf4" stroke="#1f1a17" stroke-width="4" stroke-linejoin="round" />
+  <!-- franja roja -->
+  <rect x="78" y="226" width="44" height="11" fill="#E8455A" />
+  <!-- puerta -->
+  <path d="M90 280 L90 250 Q100 240 110 250 L110 280 Z" fill="#1f1a17" />
+  <!-- ventana -->
+  <rect x="92" y="180" width="16" height="20" rx="3" fill="#1f1a17" />
+  <!-- tejado -->
+  <path d="M76 132 L124 132 L100 84 Z" fill="#1f1a17" stroke="#1f1a17" stroke-width="4" stroke-linejoin="round" />
+
+  <!-- aspas -->
+  <g
+    class:list={["wm-sails", { reverse }]}
+    style={`--spin:${spin}s`}
+  >
+    {angles.map((a) => (
+      <g transform={`rotate(${a} ${hub.x} ${hub.y})`}>
+        <rect x="92" y="26" width="16" height="84" rx="4" fill="#fdfaf4" stroke="#1f1a17" stroke-width="3.5" />
+        <line x1="100" y1="28" x2="100" y2="108" stroke="#1f1a17" stroke-width="2.5" />
+        {slats.map((y) => (
+          <line x1="93" y1={y} x2="107" y2={y} stroke="#1f1a17" stroke-width="2.5" />
+        ))}
+      </g>
+    ))}
+  </g>
+  <circle cx="100" cy="110" r="8" fill="#E8455A" stroke="#1f1a17" stroke-width="3" />
+</svg>
+
+<style>
+  .wm {
+    display: block;
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(0 8px 10px rgba(31, 26, 23, 0.18));
+  }
+  .wm-sails {
+    transform-origin: 100px 110px;
+    transform-box: view-box;
+    animation: wm-spin var(--spin, 16s) linear infinite;
+  }
+  .wm-sails.reverse { animation-direction: reverse; }
+  @keyframes wm-spin {
+    to { transform: rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wm-sails { animation: none; }
+  }
+</style>

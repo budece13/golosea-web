@@ -1,0 +1,22 @@
+---
+// Banderines de feria (papel picado / triángulos) como divisor festivo.
+interface Props {
+  flip?: boolean;   // banderines apuntando hacia arriba
+  class?: string;
+}
+const { flip = false, class: cls = "" } = Astro.props;
+---
+
+<div class:list={["bunting", { flip }, cls]} role="presentation" aria-hidden="true"></div>
+
+<style>
+  .bunting {
+    height: 30px;
+    width: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 30'%3E%3Cline x1='0' y1='3' x2='160' y2='3' stroke='%231f1a17' stroke-width='2.5'/%3E%3Cpolygon points='6,3 34,3 20,27' fill='%23E8455A' stroke='%231f1a17' stroke-width='1.5'/%3E%3Cpolygon points='46,3 74,3 60,27' fill='%233FA7E0' stroke='%231f1a17' stroke-width='1.5'/%3E%3Cpolygon points='86,3 114,3 100,27' fill='%23fdfaf4' stroke='%231f1a17' stroke-width='1.5'/%3E%3Cpolygon points='126,3 154,3 140,27' fill='%23F5C542' stroke='%231f1a17' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 160px 30px;
+    background-position: top center;
+  }
+  .bunting.flip { transform: scaleY(-1); }
+</style>
