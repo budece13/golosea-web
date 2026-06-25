@@ -24,3 +24,5 @@ pnpm-debug.log*
 .idea/
 
 _ref/
+
+data/visits.json
