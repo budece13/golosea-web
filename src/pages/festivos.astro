@@ -1,99 +1,429 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { business, images } from "../data/golosea";
+import { festividades } from "../data/festividades";
 
-// Placeholder: se editará con las campañas reales de cada temporada.
-const eventos = [
-  { emoji: "🎃", t: "Halloween", fecha: "31 oct", d: "Cucuruchos de miedo y chuches temáticas para la noche más dulce." },
-  { emoji: "🎄", t: "Navidad", fecha: "Diciembre", d: "Cestas y detalles navideños para regalar (o autorregalarte)." },
-  { emoji: "💘", t: "San Valentín", fecha: "14 feb", d: "Chocolates y gominolas con forma de corazón." },
-  { emoji: "🎭", t: "Carnaval", fecha: "Febrero", d: "Bolsas de chuches para disfraces y desfiles." },
-  { emoji: "🐰", t: "Pascua", fecha: "Primavera", d: "Huevos de chocolate y sorpresas para los peques." },
-  { emoji: "🎉", t: "Novedades", fecha: "Todo el año", d: "Las últimas chuches y snacks que van llegando a la tienda." },
-];
+const festival = festividades.find((f) => f.active);
+if (!festival) return Astro.redirect("/");
+
+const [from, to] = festival.galeriaSlice;
+const galeriaFotos = images.gallery.slice(from, to);
+
+const waText = encodeURIComponent(
+  `Hola! Me paso por Golosea para el ${festival.nombre}. ¿Tenéis todo disponible?`
+);
+const waUrl = `https://wa.me/${business.whatsapp}?text=${waText}`;
+const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(business.address)}`;
 ---
 
-<Layout
-  title="Festivos y novedades | Golosea"
-  description="Campañas de temporada, productos nuevos y fechas especiales en Golosea, El Bonillo."
->
-  <section class="page-head">
-    <div class="container">
-      <p class="eyebrow">Calendario dulce</p>
-      <h1>Festivos y novedades</h1>
-      <p class="lead">
-        Lo último de Golosea: campañas de temporada, productos nuevos y fechas
-        especiales para no perderte ni un antojo.
-      </p>
+<Layout title={festival.seoTitle} description={festival.seoDescription}>
+
+  <!-- ═══════════════════════════════════════════════ 1 · HERO ══════════ -->
+  <section class="fest-hero" style={`background: ${festival.colorHero};`}>
+    <div class="container fest-hero__inner">
+      <p class="fest-eyebrow">{festival.subtitulo}</p>
+      <h1 class="fest-h1">{festival.tagline}</h1>
+      <p class="fest-lead">{festival.pitchGolosea}</p>
+      <div class="fest-hero__ctas">
+        <a href={waUrl} class="btn btn--whatsapp" target="_blank" rel="noopener noreferrer">
+          📲 Escríbenos por WhatsApp
+        </a>
+        <a href={mapsUrl} class="btn btn--outline-light" target="_blank" rel="noopener noreferrer">
+          📍 Cómo llegar
+        </a>
+      </div>
+    </div>
+    <div class="fest-hero__noise" aria-hidden="true"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════ 2 · INTRO + SEO ══ -->
+  <section class="section fest-intro">
+    <div class="container fest-intro__grid">
+      <div class="fest-intro__text">
+        <p class="section-eyebrow">Sobre el festival</p>
+        <h2>El Alterna Festival vuelve a El Bonillo</h2>
+        {festival.descripcionFestival.split("\n").filter(Boolean).map((p) => (
+          <p class="prose-p">{p}</p>
+        ))}
+        <a href={waUrl} class="btn btn--primary" target="_blank" rel="noopener noreferrer">
+          Avísanos que vas {festival.emoji}
+        </a>
+      </div>
+      <div class="fest-intro__img">
+        <img
+          src={galeriaFotos[0]?.url}
+          alt={galeriaFotos[0]?.alt}
+          width="560"
+          height="420"
+          loading="eager"
+        />
+      </div>
     </div>
   </section>
 
-  <section class="section">
+  <!-- ═══════════════════════════════════════════════ 3 · OFERTA ═══════ -->
+  <section class="section fest-oferta">
     <div class="container">
-      <div class="grid">
-        {eventos.map((e) => (
-          <article class="card">
-            <div class="card-emoji">{e.emoji}</div>
-            <span class="fecha">{e.fecha}</span>
-            <h3>{e.t}</h3>
-            <p>{e.d}</p>
+      <p class="section-eyebrow section-eyebrow--light">Lo que encontrarás</p>
+      <h2 class="section-h2--light">Todo para el botellón y el campamento</h2>
+      <div class="oferta-grid">
+        {festival.oferta.map((item) => (
+          <article class="oferta-card">
+            <span class="oferta-emoji" aria-hidden="true">{item.emoji}</span>
+            <h3>{item.titulo}</h3>
+            <p>{item.descripcion}</p>
           </article>
         ))}
       </div>
     </div>
   </section>
+
+  <!-- ═══════════════════════════════════════════════ 4 · POR QUÉ ══════ -->
+  <section class="section fest-why">
+    <div class="container">
+      <p class="section-eyebrow">La diferencia</p>
+      <h2>¿Por qué parar en Golosea?</h2>
+      <div class="why-grid">
+        {festival.beneficios.map((b) => (
+          <div class="why-card">
+            <span class="why-emoji" aria-hidden="true">{b.emoji}</span>
+            <div class="why-text">
+              <strong>{b.titulo}</strong>
+              <p>{b.texto}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════ 5 · GALERÍA ══════ -->
+  <section class="section fest-gallery">
+    <div class="container">
+      <p class="section-eyebrow">La tienda</p>
+      <h2>Lo tienes todo aquí</h2>
+      <div class="gallery-grid">
+        {galeriaFotos.map((img) => (
+          <figure class="gallery-fig">
+            <img
+              src={img.url}
+              alt={img.alt}
+              width="360"
+              height="270"
+              loading="lazy"
+            />
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════ 6 · CTA FINAL ════ -->
+  <section class="fest-cta">
+    <div class="container fest-cta__inner">
+      <p class="fest-cta__pre">Antes del primer acorde</p>
+      <h2 class="fest-cta__h2">Pásate por Golosea</h2>
+      <p class="fest-cta__addr">{business.address}</p>
+      <div class="fest-cta__btns">
+        <a href={waUrl} class="btn btn--whatsapp" target="_blank" rel="noopener noreferrer">
+          📲 WhatsApp
+        </a>
+        <a href={mapsUrl} class="btn btn--outline-dark" target="_blank" rel="noopener noreferrer">
+          📍 Cómo llegar
+        </a>
+      </div>
+    </div>
+  </section>
+
 </Layout>
 
 <style>
-  .page-head {
-    background: var(--color-light);
-    padding: 120px 0 44px;
-    text-align: center;
+  /* ── HERO ─────────────────────────────────────────────────────────── */
+  .fest-hero {
+    position: relative;
+    padding: 140px 0 80px;
+    overflow: hidden;
+    color: #fff;
   }
-  .page-head .eyebrow {
+  .fest-hero__noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 200px;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+  .fest-hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+  }
+  .fest-eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 100px;
+    padding: 6px 16px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(6px);
+  }
+  .fest-h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    line-height: 1.05;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  .fest-lead {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.82);
+    max-width: 580px;
+    margin-bottom: 36px;
+  }
+  .fest-hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .btn--outline-light {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    color: #fff;
+    background: transparent;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn--outline-light:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #fff;
+  }
+
+  /* ── INTRO ────────────────────────────────────────────────────────── */
+  .fest-intro { background: var(--color-light); }
+  .fest-intro__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .fest-intro__text { display: flex; flex-direction: column; gap: 16px; }
+  .fest-intro__text h2 {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    color: var(--color-dark);
+    line-height: 1.15;
+  }
+  .prose-p {
+    color: #444;
+    line-height: 1.7;
+    font-size: 1rem;
+  }
+  .fest-intro__img img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(15, 59, 42, 0.18);
+  }
+
+  /* ── OFERTA ───────────────────────────────────────────────────────── */
+  .fest-oferta {
+    background: var(--color-dark);
+    color: #fff;
+  }
+  .section-eyebrow--light {
+    color: rgba(255, 255, 255, 0.65) !important;
+  }
+  .section-h2--light {
+    color: #fff;
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    margin-bottom: 40px;
+  }
+  .oferta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .oferta-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 28px 24px;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .oferta-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-4px);
+  }
+  .oferta-emoji {
+    display: block;
+    font-size: 2.2rem;
+    margin-bottom: 14px;
+    line-height: 1;
+  }
+  .oferta-card h3 {
+    font-family: var(--font-subheading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .oferta-card p {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  /* ── POR QUÉ ──────────────────────────────────────────────────────── */
+  .fest-why { background: #fff; }
+  .fest-why h2 {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    color: var(--color-dark);
+    margin-bottom: 40px;
+  }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .why-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    background: var(--color-light);
+    border-radius: 18px;
+    padding: 24px 20px;
+    border: 1px solid rgba(232, 69, 90, 0.12);
+  }
+  .why-emoji {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .why-text strong {
+    display: block;
+    font-family: var(--font-subheading);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--color-dark);
+    margin-bottom: 6px;
+  }
+  .why-text p {
+    font-size: 0.93rem;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  /* ── GALERÍA ──────────────────────────────────────────────────────── */
+  .fest-gallery { background: var(--color-light); }
+  .fest-gallery h2 {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    color: var(--color-dark);
+    margin-bottom: 32px;
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .gallery-fig {
+    margin: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+    aspect-ratio: 4 / 3;
+  }
+  .gallery-fig img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+  .gallery-fig:hover img { transform: scale(1.05); }
+
+  /* ── CTA FINAL ────────────────────────────────────────────────────── */
+  .fest-cta {
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-dark) 0%,
+      var(--color-primary) 60%,
+      #f05e6e 100%
+    );
+    padding: 90px 0;
+    text-align: center;
+    color: #fff;
+  }
+  .fest-cta__inner { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .fest-cta__pre {
+    font-family: var(--font-body);
     font-weight: 700;
     font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .fest-cta__h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .fest-cta__addr {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 16px;
+  }
+  .fest-cta__btns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+  .btn--outline-dark {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    color: #fff;
+    background: transparent;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn--outline-dark:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #fff;
+  }
+
+  /* ── SHARED ───────────────────────────────────────────────────────── */
+  .section { padding: 80px 0; }
+  .section-eyebrow {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--color-primary);
     margin-bottom: 8px;
   }
-  .page-head h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
-    color: var(--color-dark);
-    margin-bottom: 12px;
-  }
-  .page-head .lead {
-    max-width: 600px;
-    margin: 0 auto;
-    color: #555;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 24px;
-  }
-  .card {
-    background: var(--color-light);
-    border-radius: 16px;
-    padding: 28px;
-    border: 1px solid #eee;
-    transition: box-shadow 0.2s, transform 0.2s;
-  }
-  .card:hover {
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    transform: translateY(-4px);
-  }
-  .card-emoji { font-size: 2rem; margin-bottom: 10px; }
-  .fecha {
-    display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--color-primary);
-    margin-bottom: 6px;
-  }
-  .card h3 { margin-bottom: 8px; font-size: 1.15rem; color: var(--color-dark); }
-  .card p { color: #555; font-size: 0.95rem; line-height: 1.5; }
 </style>
