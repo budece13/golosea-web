@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import Windmill from "../components/festival/Windmill.astro";
 import Bunting from "../components/festival/Bunting.astro";
 import AlternaLogo from "../components/festival/AlternaLogo.astro";
+import KaliCup from "../components/festival/KaliCup.astro";
 import { business, images } from "../data/golosea";
 import { festividades } from "../data/festividades";
 
@@ -132,6 +133,23 @@ const cartelLine = festival.cartel.join("   ✦   ");
             <p>{item.descripcion}</p>
           </article>
         ))}
+      </div>
+
+      <div class="kali-promo">
+        <div class="kali-promo__art">
+          <KaliCup />
+        </div>
+        <div class="kali-promo__text">
+          <h3>En Golosea tenemos tu <span>kalimotxo</span>, <span>birra</span> y <span>botellón</span> al mejor precio</h3>
+          <p>
+            ¿Dudas con las bebidas, los kits o los precios? Pregúntale a Gummy-Bear,
+            nuestro asistente, o escríbenos por WhatsApp y te echamos un cable al momento.
+          </p>
+          <div class="kali-promo__btns">
+            <button type="button" id="askGummy" class="btn btn--ghost-dark">💬 Pregunta a Gummy-Bear</button>
+            <a href={waUrl} class="btn btn--whatsapp" target="_blank" rel="noopener noreferrer">📲 WhatsApp</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -511,6 +529,56 @@ const cartelLine = festival.cartel.join("   ✦   ");
   }
   .oferta-card p { font-size: 0.93rem; line-height: 1.6; color: rgba(255, 255, 255, 0.74); }
 
+  /* Apartado kalimotxo / botellón */
+  .kali-promo {
+    margin-top: 44px;
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 34px;
+    align-items: center;
+    background:
+      radial-gradient(120% 140% at 12% 0%, rgba(232, 69, 90, 0.22), transparent 55%),
+      radial-gradient(120% 140% at 100% 100%, rgba(63, 167, 224, 0.18), transparent 55%),
+      rgba(255, 255, 255, 0.04);
+    border: 2px solid rgba(255, 255, 255, 0.14);
+    border-radius: 28px;
+    padding: 30px 36px;
+  }
+  .kali-promo__art {
+    display: flex;
+    justify-content: center;
+    animation: kaliBob 3.4s ease-in-out infinite;
+  }
+  @keyframes kaliBob {
+    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+    50%      { transform: translateY(-8px) rotate(1.5deg); }
+  }
+  .kali-promo__text h3 {
+    font-family: var(--font-subheading);
+    font-weight: 700;
+    font-size: clamp(1.35rem, 2.9vw, 1.95rem);
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .kali-promo__text h3 span { color: #ffd23f; }
+  .kali-promo__text p {
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.6;
+    margin-bottom: 22px;
+  }
+  .kali-promo__btns { display: flex; flex-wrap: wrap; gap: 12px; }
+  .kali-promo__btns .btn { cursor: pointer; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kali-promo__art { animation: none; }
+  }
+  @media (max-width: 760px) {
+    .kali-promo { grid-template-columns: 1fr; text-align: center; padding: 28px 24px; }
+    .kali-promo__btns { justify-content: center; }
+    .kali-promo__art { max-width: 200px; margin: 0 auto; }
+  }
+
   /* ═══ 6 · POR QUÉ ══════════════════════════════════════════════════ */
   .fest-why { background: #fff; }
   .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
@@ -621,3 +689,12 @@ const cartelLine = festival.cartel.join("   ✦   ");
     .precio-banner__inner { gap: 14px; }
   }
 </style>
+
+<script>
+  // El botón "Pregunta a Gummy-Bear" abre la ventana del chatbot (vive en el Layout)
+  document.getElementById("askGummy")?.addEventListener("click", () => {
+    const chatBtn = document.getElementById("chatBtn");
+    const panel = document.getElementById("chatPanel");
+    if (chatBtn && panel && !panel.classList.contains("open")) chatBtn.click();
+  });
+</script>

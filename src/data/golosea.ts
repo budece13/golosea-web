@@ -204,4 +204,5 @@ export const chatbotFacts = [
   "Productos: golosinas surtidas, chocolates, gominolas, snacks salados, bebidas refrescantes, paletas y chicles.",
   "Horario tipico: martes a domingo, manana y tarde; lunes cerrado.",
   "Se preparan encargos para fiestas; conviene avisar con antelacion.",
+  "Distancias andando hasta la tienda: desde el Recinto El Quijote (donde se celebra el Alterna Festival), 3 minutos; desde el Parque El Rollo, 3 minutos; desde la Plaza de Toros, 8-10 minutos como mucho; desde el Parque de Abajo, 8-10 minutos como mucho.",
 ] as const;

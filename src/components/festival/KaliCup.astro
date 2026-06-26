@@ -1,0 +1,77 @@
+---
+// Cubalitro de kalimotxo con pajitas, hielo y burbujas. Decorativo.
+interface Props {
+  class?: string;
+}
+const { class: cls = "" } = Astro.props;
+---
+
+<svg
+  class:list={["kali", cls]}
+  viewBox="0 0 220 300"
+  role="img"
+  aria-label="Cubalitro de kalimotxo con pajitas"
+>
+  <defs>
+    <linearGradient id="kaliLiquid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a343b" />
+      <stop offset="1" stop-color="#2a0f12" />
+    </linearGradient>
+    <pattern id="kaliStraw" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#ffffff" />
+      <rect width="5" height="10" fill="#e8455a" />
+    </pattern>
+    <pattern id="kaliStraw2" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#ffffff" />
+      <rect width="5" height="10" fill="#18b24c" />
+    </pattern>
+  </defs>
+
+  <!-- sombra -->
+  <ellipse cx="110" cy="284" rx="62" ry="11" fill="rgba(0,0,0,0.22)" />
+
+  <!-- líquido -->
+  <path d="M52 96 L66 268 L154 268 L168 96 Z" fill="url(#kaliLiquid)" />
+  <ellipse cx="110" cy="96" rx="58" ry="9" fill="#8a3a42" />
+
+  <!-- hielos -->
+  <g fill="rgba(255,255,255,0.40)" stroke="rgba(255,255,255,0.65)" stroke-width="1.5">
+    <rect x="74" y="118" width="26" height="26" rx="6" transform="rotate(-12 87 131)" />
+    <rect x="112" y="138" width="24" height="24" rx="6" transform="rotate(14 124 150)" />
+    <rect x="90" y="168" width="22" height="22" rx="5" transform="rotate(6 101 179)" />
+  </g>
+
+  <!-- burbujas -->
+  <g fill="rgba(255,255,255,0.5)">
+    <circle cx="80" cy="200" r="3" />
+    <circle cx="132" cy="208" r="2.5" />
+    <circle cx="100" cy="232" r="2" />
+    <circle cx="122" cy="180" r="2.2" />
+    <circle cx="88" cy="240" r="1.8" />
+  </g>
+
+  <!-- pajitas -->
+  <rect x="92" y="24" width="11" height="152" rx="5.5" fill="url(#kaliStraw)" stroke="#1f1a17" stroke-width="1.5" transform="rotate(-9 98 100)" />
+  <rect x="118" y="28" width="11" height="148" rx="5.5" fill="url(#kaliStraw2)" stroke="#1f1a17" stroke-width="1.5" transform="rotate(12 124 100)" />
+
+  <!-- vaso (plástico translúcido) -->
+  <path d="M44 70 L66 270 L154 270 L176 70" fill="rgba(255,255,255,0.12)" stroke="#1f1a17" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="110" cy="70" rx="66" ry="11" fill="none" stroke="#1f1a17" stroke-width="3.5" />
+  <!-- brillo -->
+  <path d="M60 86 L74 248" stroke="rgba(255,255,255,0.45)" stroke-width="6" stroke-linecap="round" fill="none" />
+
+  <!-- rodaja de lima en el borde -->
+  <g transform="translate(160 62)">
+    <circle r="15" fill="#7bc043" stroke="#1f1a17" stroke-width="2.5" />
+    <circle r="10" fill="none" stroke="#d6ecae" stroke-width="3" />
+  </g>
+</svg>
+
+<style>
+  .kali {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 250px;
+  }
+</style>

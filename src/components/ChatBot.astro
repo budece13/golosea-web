@@ -2,12 +2,19 @@
 import { business } from "../data/golosea";
 ---
 
+<button class="chat-cta" id="chatCta" type="button">
+  <span class="chat-cta__text">Consulta nuestras bebidas y precios aquí</span>
+  <svg class="chat-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M5 12h14" /><path d="m13 6 6 6-6 6" />
+  </svg>
+</button>
+
 <button class="chat-btn" id="chatBtn" aria-label="Abrir chat de Golosea">💬</button>
 
 <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Chat con Golosea">
   <div class="chat-head">
-    {business.name}
-    <small>Asistente virtual · responde al instante</small>
+    <img src="/logo/golosea-logo.png" alt="Golosea" class="chat-logo" />
+    <small>Soy Gummy-Bear, el asistente virtual de Golosea</small>
   </div>
   <div class="chat-body" id="chatBody">
     <div class="msg bot">Hola 👋 Soy el asistente de {business.name}. ¿En qué puedo ayudarte?</div>
@@ -40,6 +47,67 @@ import { business } from "../data/golosea";
     transform: scale(1.08);
   }
 
+  /* CTA flotante que apunta a la burbuja del chat */
+  .chat-cta {
+    position: fixed;
+    bottom: 30px;
+    right: 92px;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 230px;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 16px 16px 4px 16px;
+    background: #fff;
+    color: var(--color-dark);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.85rem;
+    line-height: 1.25;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+    animation: ctaPop 0.4s ease 1s both, ctaFloat 2.8s ease-in-out 1.4s infinite;
+  }
+  .chat-cta__text { flex: 1; }
+  .chat-cta__arrow {
+    width: 20px;
+    height: 20px;
+    color: var(--color-primary);
+    flex-shrink: 0;
+    animation: ctaNudge 1.1s ease-in-out infinite;
+  }
+  .chat-cta:hover { box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28); }
+  .chat-cta--hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.85) translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s 0.25s;
+  }
+
+  @keyframes ctaPop {
+    from { opacity: 0; transform: scale(0.7) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes ctaFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-5px); }
+  }
+  @keyframes ctaNudge {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(4px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chat-cta, .chat-cta__arrow { animation: none; }
+  }
+
+  @media (max-width: 480px) {
+    .chat-cta { max-width: 175px; font-size: 0.78rem; bottom: 26px; right: 86px; }
+  }
+
   .chat-panel {
     position: fixed;
     bottom: 90px;
@@ -64,51 +132,83 @@ import { business } from "../data/golosea";
   .chat-head {
     background: var(--color-primary);
     color: #fff;
-    padding: 14px 16px;
-    font-weight: 700;
-    font-family: var(--font-heading);
-    font-size: 1rem;
+    padding: 12px 16px;
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
-
+  .chat-logo {
+    height: 34px;
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
   .chat-head small {
     display: block;
     font-weight: 400;
-    opacity: 0.85;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     font-family: var(--font-body);
+    color: rgba(255,255,255,0.88);
   }
 
   .chat-body {
     flex: 1;
     overflow-y: auto;
-    padding: 14px;
+    padding: 16px 14px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    background: #f7f8fa;
+    gap: 9px;
+    /* Fondo crema con siluetas de chuches (lollipop, bombón, osito, bastón) */
+    background-color: #f4ece1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='%23dcc8b3'%3E%3Cellipse cx='34' cy='34' rx='13' ry='9'/%3E%3Cpath d='M21 34 L9 26 L11 42 Z'/%3E%3Cpath d='M47 34 L59 26 L57 42 Z'/%3E%3Ccircle cx='118' cy='32' r='12'/%3E%3Crect x='116' y='44' width='3' height='22' rx='1.5'/%3E%3Ccircle cx='38' cy='104' r='8'/%3E%3Ccircle cx='32' cy='97' r='3'/%3E%3Ccircle cx='44' cy='97' r='3'/%3E%3Crect x='30' y='110' width='16' height='20' rx='8'/%3E%3Ccircle cx='28' cy='116' r='4'/%3E%3Ccircle cx='48' cy='116' r='4'/%3E%3Ccircle cx='33' cy='130' r='4'/%3E%3Ccircle cx='43' cy='130' r='4'/%3E%3Ccircle cx='86' cy='74' r='2.5'/%3E%3Ccircle cx='150' cy='86' r='2.5'/%3E%3Ccircle cx='74' cy='150' r='2.5'/%3E%3Ccircle cx='8' cy='74' r='2.5'/%3E%3C/g%3E%3Cg fill='none' stroke='%23dcc8b3' stroke-width='5' stroke-linecap='round'%3E%3Cpath d='M116 132 L116 112 Q116 104 124 104 Q132 104 132 112'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 150px 150px;
   }
 
-  .msg {
-    max-width: 80%;
-    padding: 10px 13px;
-    border-radius: 14px;
+  /* OJO: los mensajes se crean por JS (sin atributo data-astro), así que las
+     reglas van con :global() ancladas a .chat-body para que también apliquen
+     a las burbujas dinámicas, no solo al mensaje de bienvenida estático. */
+  .chat-body :global(.msg) {
+    position: relative;
+    max-width: 78%;
+    padding: 8px 12px;
+    border-radius: 12px;
     font-size: 0.92rem;
-    line-height: 1.4;
+    line-height: 1.42;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+    word-wrap: break-word;
   }
 
-  .msg.bot {
-    background: #fff;
-    border: 1px solid #eee;
+  /* Mensajes del agente (Gummy-Bear): crema, a la izquierda, piquito arriba-izq */
+  .chat-body :global(.msg.bot) {
+    background: #FFFDF7;
+    color: #2a1f1a;
     align-self: flex-start;
-    border-bottom-left-radius: 4px;
+    border-top-left-radius: 2px;
+  }
+  .chat-body :global(.msg.bot)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -7px;
+    border-top: 9px solid #FFFDF7;
+    border-left: 8px solid transparent;
   }
 
-  .msg.user {
-    background: var(--color-primary);
+  /* Mensajes del cliente: verde, a la derecha, piquito arriba-der */
+  .chat-body :global(.msg.user) {
+    background: #25b54c;
     color: #fff;
     align-self: flex-end;
-    border-bottom-right-radius: 4px;
+    border-top-right-radius: 2px;
+  }
+  .chat-body :global(.msg.user)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -7px;
+    border-top: 9px solid #25b54c;
+    border-right: 8px solid transparent;
   }
 
   .chat-input {
@@ -148,10 +248,23 @@ import { business } from "../data/golosea";
   const input = document.getElementById('chatInput') as HTMLInputElement;
   const history: { role: string; content: string }[] = [];
 
+  const cta = document.getElementById('chatCta');
+
+  function openPanel() {
+    panel.classList.add('open');
+    cta?.classList.add('chat-cta--hidden');
+    input.focus();
+  }
+
   document.getElementById('chatBtn')!.addEventListener('click', () => {
-    panel.classList.toggle('open');
-    if (panel.classList.contains('open')) input.focus();
+    if (panel.classList.contains('open')) {
+      panel.classList.remove('open');
+    } else {
+      openPanel();
+    }
   });
+
+  cta?.addEventListener('click', openPanel);
 
   function addMsg(text: string, who: 'bot' | 'user') {
     const d = document.createElement('div');

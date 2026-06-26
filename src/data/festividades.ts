@@ -33,6 +33,7 @@ export interface Festividad {
   precioClaim: string;         // titular del banner de precio
   precioSub: string;           // subtítulo del banner de precio
   cartel: string[];            // nombres del cartel (ticker). Vacío = se oculta
+  precios?: string[];          // lista de precios para el chatbot (no se muestra en la web)
   oferta: OfertaItem[];        // productos/servicios especiales
   beneficios: BeneficioItem[]; // razones para venir a Golosea
   imagenIntro?: { url: string; alt: string }; // foto destacada del intro (si no, usa la galería)
@@ -73,6 +74,22 @@ export const festividades: Festividad[] = [
       "Parkineos",
       "Nerve Agent",
       "Awakate",
+    ],
+    precios: [
+      "Kit Botellón (botella de Barceló, Larios 12 o Johnnie Walker + 1 mezcla + hielo + 6 vasos): 25 €. Es la opción más a cuenta para el grupo.",
+      "Kit Botellón con botella de Larios litro o Negrita: 22 €.",
+      "Kit Kalimotxo (cartón de vino + 2 L de mezcla + hielo + vasos): 6 €. Ideal y baratísimo para el grupo.",
+      "Cartón de vino Gran Duque 1 L: 1,60 €.",
+      "Litrona Embrau: 1,60 €.",
+      "Litrona Amstel: 2,00 €.",
+      "Lata Embrau: 0,80 €.",
+      "Lata Amstel: 1,00 €.",
+      "Lata Heineken: 1,10 €.",
+      "Lata Mahou clásica: 1,10 €.",
+      "Tinto de verano clásico o con limón: 1,90 €.",
+      "Bolsa de hielo: 1,50 €.",
+      "Refrescos en lata (Coca-Cola normal y Zero, Aquarius de limón, Fanta de naranja y de limón): 1,00 € cada una.",
+      "Botella de Sprite de 2 L: 2,00 €.",
     ],
     oferta: [
       {
