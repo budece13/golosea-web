@@ -18,7 +18,7 @@ export const content = {
     "Golosinas clasicas, chocolates, gominolas, snacks y bebidas frescas. Y para tus fiestas, cucuruchos personalizados que se llevan todas las miradas.",
   cta_text: "Pide tu cucurucho",
 
-  about_title: "Mas que una tienda de chuches",
+  about_title: "Más que una tienda de chuches",
   about_text:
     "En Golosea creemos que cada antojo merece su momento. Por eso reunimos las golosinas de siempre y los sabores nuevos en un solo sitio, con un trato cercano y una sonrisa. Y cuando hay algo que celebrar, montamos cucuruchos y detalles personalizados para que tu fiesta sepa todavia mejor.",
 
@@ -28,36 +28,42 @@ export const content = {
       description:
         "Montamos cucuruchos tematicos para cumpleanos, comuniones y eventos. Tu eliges los colores y las chuches; nosotros la magia.",
       emoji: "🎉",
+      image: "/images/cucuruchos.jpg",
     },
     {
       title: "Golosinas surtidas",
       description:
         "Dulces, acidos, gominolas de fruta, regaliz y caramelos. Un surtido enorme para cualquier antojo.",
       emoji: "🍬",
+      image: "/images/golosinas-surtidas.jpg",
     },
     {
       title: "Chocolates",
       description:
         "Chocolate con leche, negro y rellenos. El capricho perfecto para los mas golosos.",
       emoji: "🍫",
+      image: "/images/chocolates.webp",
     },
     {
       title: "Snacks salados",
       description:
         "Patatas, frutos secos y picoteo para cuando lo que apetece es algo crujiente.",
       emoji: "🥨",
+      image: "/images/snacks.webp",
     },
     {
       title: "Bebidas refrescantes",
       description:
         "Refrescos, batidos y bebidas bien frias para acompanar tu visita.",
       emoji: "🥤",
+      image: "/images/bebidas.jpeg",
     },
     {
       title: "Detalles para fiestas",
       description:
         "Paletas, chicles y bolsitas listas para repartir en cualquier celebracion.",
       emoji: "🍭",
+      image: "/images/bolsitas.jpg",
     },
   ],
 

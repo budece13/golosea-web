@@ -1,25 +1,65 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { content, images } from "../data/golosea";
+import { content, business } from "../data/golosea";
+
+const fachada = {
+  url: "/images/golosea-fachada-edit.webp",
+  alt: "Fachada de la tienda Golosea en El Bonillo",
+};
+
+const waLink = `https://wa.me/${business.whatsapp}`;
 ---
 
 <Layout
   title="Sobre Golosea | Tienda de chuches en El Bonillo"
   description="Conoce Golosea: tienda de golosinas y chucherías en El Bonillo (Albacete), cucuruchos personalizados y mucho más."
 >
-  <!-- Cabecera de página -->
-  <section class="page-head">
-    <div class="container">
-      <p class="eyebrow">Sobre Golosea</p>
-      <h1>{content.about_title}</h1>
+  <!-- HERO ENCANTADO -->
+  <section class="hero">
+    <div class="hero__sky" aria-hidden="true">
+      <span class="star star--1">✦</span>
+      <span class="star star--2">✦</span>
+      <span class="star star--3">✦</span>
+      <span class="star star--4">✦</span>
+      <span class="star star--5">✦</span>
+      <img class="cloud cloud--1" src="/images/nube-algodon.png" alt="" />
+      <img class="cloud cloud--2" src="/images/nube-algodon.png" alt="" />
+      <img class="cloud cloud--3" src="/images/nube-algodon.png" alt="" />
+      <img class="cloud cloud--4" src="/images/nube-algodon.png" alt="" />
+      <img class="cloud cloud--5" src="/images/nube-algodon.png" alt="" />
+      <img class="cloud cloud--6" src="/images/nube-alargada-rosa.png" alt="" />
+      <img class="cloud cloud--7" src="/images/nube-alargada-rosa.png" alt="" />
+      <img class="cloud cloud--8" src="/images/nube-alargada-rosa.png" alt="" />
     </div>
+
+    <div class="container hero__inner">
+      <div class="hero__text">
+        <p class="eyebrow">✨ Sobre Golosea</p>
+        <h1>{content.about_title}</h1>
+        <p class="hero__lead">{content.tagline}. Un rinconcito mágico en {business.zona} donde cada antojo tiene su momento.</p>
+        <div class="hero__ctas">
+          <a class="btn btn--sun" href="/#galeria">Ver la tienda</a>
+          <a class="btn btn--rose" href={waLink} target="_blank" rel="noopener">Escríbenos</a>
+        </div>
+      </div>
+
+      <figure class="hero__photo">
+        <img src={fachada.url} alt={fachada.alt} loading="eager" fetchpriority="high" />
+        <figcaption>📍 {business.address}</figcaption>
+      </figure>
+    </div>
+
+    <div class="hero__scallop" aria-hidden="true"></div>
   </section>
 
   <!-- NOSOTROS -->
   <section class="section about-section">
     <div class="container">
       <div class="about-grid">
-        <img src={images.about.url} alt={images.about.alt} loading="lazy" />
+        <div class="about-photo">
+          <img src="/images/galeria-2.webp" alt="Golosinas variadas de Golosea" loading="lazy" />
+          <span class="about-sticker">🍭</span>
+        </div>
         <div class="about-text">
           <p>{content.about_text}</p>
           <div class="why-grid">
@@ -39,15 +79,21 @@ import { content, images } from "../data/golosea";
   </section>
 
   <!-- SERVICIOS -->
-  <section class="section">
+  <section class="section services-section">
     <div class="container">
       <div class="section-title">
         <h2>Nuestros <span>servicios</span></h2>
+        <p class="section-sub">Todo lo que sale de nuestro mostrador mágico</p>
       </div>
       <div class="grid">
         {content.services.map((s) => (
           <article class="card">
-            <div class="card-emoji">{s.emoji}</div>
+            <div class="card-media">
+              {s.image
+                ? <img src={s.image} alt={s.title} loading="lazy" />
+                : <span class="card-media__emoji">{s.emoji}</span>}
+              <span class="card-badge">{s.emoji}</span>
+            </div>
             <h3>{s.title}</h3>
             <p>{s.description}</p>
           </article>
@@ -56,44 +102,187 @@ import { content, images } from "../data/golosea";
     </div>
   </section>
 
-  <!-- BLOG (placeholder) -->
-  <section class="section blog-section">
+  <!-- CTA FINAL -->
+  <section class="section cta-section">
     <div class="container">
-      <div class="section-title">
-        <h2>Del <span>blog</span></h2>
-      </div>
-      <div class="grid">
-        {[1, 2, 3].map((n) => (
-          <article class="card blog-card">
-            <span class="blog-tag">Próximamente</span>
-            <h3>Entrada del blog {n}</h3>
-            <p>Aquí publicaremos recetas, curiosidades dulces y novedades de la tienda.</p>
-          </article>
-        ))}
+      <div class="cta-card">
+        <div class="cta-sky" aria-hidden="true">
+          <span class="star star--1">✦</span>
+          <span class="star star--3">✦</span>
+          <img class="cloud cloud--1" src="/images/nube-algodon.png" alt="" />
+          <img class="cloud cloud--6" src="/images/nube-alargada-rosa.png" alt="" />
+        </div>
+        <div class="cta-content">
+          <p class="cta-eyebrow">🍭 ¿Hablamos de tu antojo?</p>
+          <h2>Ven a Golosea y alegra tu día</h2>
+          <p class="cta-text">
+            Pásate por la tienda en El Bonillo o escríbenos para preparar tus
+            cucuruchos y detalles personalizados. ¡La magia dulce te espera!
+          </p>
+          <div class="cta-ctas">
+            <a class="btn btn--sun" href={waLink} target="_blank" rel="noopener">Pide tu cucurucho</a>
+            <a class="btn btn--rose" href={`tel:${business.phone.replace(/\s+/g, "")}`}>Llámanos: {business.phone}</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 </Layout>
 
 <style>
-  .page-head {
-    background: var(--color-light);
-    padding: 120px 0 40px;
-    text-align: center;
-  }
-  .page-head .eyebrow {
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: var(--color-primary);
-    margin-bottom: 8px;
-  }
-  .page-head h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
-    color: var(--color-dark);
+  /* ─────────────────────────  HERO ENCANTADO  ───────────────────────── */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 130px 0 110px;
+    background:
+      radial-gradient(140% 90% at 85% -10%, #ffe9b8 0%, transparent 55%),
+      radial-gradient(120% 100% at 10% 0%, #ffd0d6 0%, transparent 50%),
+      linear-gradient(180deg, #ffb6c1 0%, #ffd1c2 38%, #ffe7d4 70%, var(--color-light) 100%);
   }
 
+  .hero__inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+
+  .hero .eyebrow {
+    display: inline-block;
+    background: #fff;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 7px 16px;
+    border-radius: 999px;
+    box-shadow: 0 6px 16px -8px rgba(200, 54, 74, 0.5);
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: clamp(2.3rem, 5.5vw, 3.6rem);
+    color: #E85C3A; /* coral-naranja cálido */
+    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.55);
+  }
+  .hero__lead {
+    margin: 18px 0 28px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #6a3a3f;
+    max-width: 30ch;
+  }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: 14px; }
+  /* Botones cálidos del hero (naranja + rosa) */
+  .hero__ctas .btn--sun  { --btn-bg: #FB8C3C; --btn-bg-dark: #EC6F1E; }
+  .hero__ctas .btn--rose { --btn-bg: #FF5C8A; --btn-bg-dark: #E63B6D; }
+
+  /* Foto fachada */
+  .hero__photo {
+    position: relative;
+    margin: 0;
+    transform: rotate(-2deg);
+    transform-origin: 50% 40%;
+    animation: stamp 0.7s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+  }
+  /* Entrada tipo estampa: cae desde la derecha y "sella" con rebote */
+  @keyframes stamp {
+    0% {
+      opacity: 0;
+      transform: translate(90px, -40px) rotate(12deg) scale(1.45);
+    }
+    55% {
+      opacity: 1;
+      transform: translate(0, 0) rotate(-2deg) scale(0.92);
+    }
+    75% { transform: translate(0, 0) rotate(-2deg) scale(1.03); }
+    100% { opacity: 1; transform: translate(0, 0) rotate(-2deg) scale(1); }
+  }
+  .hero__photo img {
+    width: 100%;
+    border-radius: 20px;
+    border: 7px solid #fff;
+    box-shadow:
+      0 26px 50px -18px rgba(124, 30, 50, 0.5),
+      0 4px 0 rgba(0, 0, 0, 0.05);
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
+  }
+  .hero__photo figcaption {
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%) rotate(2deg);
+    white-space: nowrap;
+    background: #6B4226; /* marrón cálido */
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 7px 16px;
+    border-radius: 999px;
+    box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Cielo decorativo: estrellas y nubes */
+  .hero__sky { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .star {
+    position: absolute;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 214, 110, 0.9);
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  .star--1 { top: 14%; left: 12%; font-size: 1.1rem; animation-delay: 0s; }
+  .star--2 { top: 26%; left: 44%; font-size: 0.8rem; animation-delay: 0.6s; }
+  .star--3 { top: 10%; right: 18%; font-size: 1.3rem; animation-delay: 1.1s; }
+  .star--4 { top: 60%; left: 6%; font-size: 0.9rem; animation-delay: 1.6s; }
+  .star--5 { top: 44%; right: 8%; font-size: 1rem; animation-delay: 2.1s; }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.25; transform: scale(0.8); }
+    50%      { opacity: 1;    transform: scale(1.15); }
+  }
+
+  /* Nubes de algodón de azúcar repartidas con distintos tamaños = profundidad */
+  .cloud {
+    position: absolute;
+    height: auto;
+    user-select: none;
+    animation: drift 16s ease-in-out infinite alternate;
+  }
+  /* Grandes y nítidas = primer plano */
+  .cloud--1 { top: 8%;  left: -3%;  width: 220px; opacity: 0.95; animation-delay: 0s; }
+  .cloud--2 { bottom: 6%; right: -2%; width: 200px; opacity: 0.92; animation-delay: -6s; }
+  /* Medianas */
+  .cloud--3 { top: 14%; right: 14%; width: 140px; opacity: 0.8; animation-delay: -12s; }
+  /* Pequeñas y difusas = fondo lejano */
+  .cloud--4 { top: 46%; left: 22%; width: 95px;  opacity: 0.6; filter: blur(1.5px); animation-delay: -3s; }
+  .cloud--5 { top: 62%; right: 30%; width: 70px; opacity: 0.5; filter: blur(2.5px); animation-delay: -16s; }
+  /* Nubes alargadas: rellenan el cielo y dan continuidad horizontal */
+  .cloud--6 { top: 30%; left: 38%; width: 300px; opacity: 0.85; animation-delay: -9s; }
+  .cloud--7 { top: 2%;  right: 24%; width: 240px; opacity: 0.7; filter: blur(1px); animation-delay: -20s; }
+  .cloud--8 { bottom: 30%; left: 4%; width: 180px; opacity: 0.55; filter: blur(2px); animation-delay: -14s; }
+  @keyframes drift {
+    0%   { transform: translate(0, 0); }
+    50%  { transform: translate(14px, -12px); }
+    100% { transform: translate(26px, 5px); }
+  }
+
+  /* Borde inferior festoneado tipo caramelo */
+  .hero__scallop {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 22px;
+    background: var(--color-light);
+    -webkit-mask: radial-gradient(20px 22px at 20px 0, transparent 98%, #000 100%) repeat-x 0 0 / 40px 22px;
+            mask: radial-gradient(20px 22px at 20px 0, transparent 98%, #000 100%) repeat-x 0 0 / 40px 22px;
+    z-index: 2;
+  }
+
+  /* ─────────────────────────  NOSOTROS  ───────────────────────── */
   .about-section { background: var(--color-light); }
 
   .about-grid {
@@ -102,25 +291,119 @@ import { content, images } from "../data/golosea";
     gap: 48px;
     align-items: center;
   }
-  .about-grid img {
-    border-radius: 18px;
+  .about-photo { position: relative; }
+  .about-photo img {
+    border-radius: 20px;
     height: 100%;
     object-fit: cover;
-    max-height: 420px;
+    max-height: 440px;
     width: 100%;
+    border: 6px solid #fff;
+    box-shadow: 0 22px 44px -20px rgba(124, 30, 50, 0.4);
+  }
+  .about-sticker {
+    position: absolute;
+    top: -18px;
+    right: -14px;
+    font-size: 2.4rem;
+    background: #fff;
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    box-shadow: 0 10px 24px -10px rgba(124, 30, 50, 0.45);
+    transform: rotate(8deg);
   }
   .about-text > p {
-    color: #444;
+    color: #5a4a4c;
     margin-bottom: 28px;
-    font-size: 1.025rem;
-    line-height: 1.7;
+    font-size: 1.05rem;
+    line-height: 1.75;
   }
 
-  .why-grid { display: flex; flex-direction: column; gap: 20px; }
-  .why-item { display: flex; gap: 16px; align-items: flex-start; }
-  .why-emoji { font-size: 1.6rem; flex-shrink: 0; }
-  .why-item h4 { margin-bottom: 4px; font-size: 1rem; color: var(--color-dark); }
-  .why-item p { color: #555; font-size: 0.9rem; }
+  .why-grid { display: flex; flex-direction: column; gap: 14px; }
+  .why-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(8px) saturate(140%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%);
+    padding: 16px 18px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-left: 4px solid var(--accent, #FF5C8A);
+    box-shadow: 0 10px 26px -20px rgba(107, 66, 38, 0.55);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .why-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 32px -18px rgba(107, 66, 38, 0.5);
+  }
+  /* Tonos cálidos rotando: rosa, naranja, marrón */
+  .why-item:nth-child(3n+1) { --accent: #FF5C8A; }
+  .why-item:nth-child(3n+2) { --accent: #FB8C3C; }
+  .why-item:nth-child(3n+3) { --accent: #B07C4F; }
+  .why-emoji {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    background: color-mix(in srgb, var(--accent, #FF5C8A) 16%, #fff);
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+  }
+  .why-item h4 { margin-bottom: 4px; font-size: 1.02rem; color: #6B4226; }
+  .why-item p { color: #7a5f55; font-size: 0.9rem; }
+
+  /* ─────────────────────────  SERVICIOS / BLOG  ───────────────────────── */
+  .section-sub {
+    margin-top: 10px;
+    color: #8a6a6c;
+    font-size: 1rem;
+  }
+
+  .services-section {
+    background:
+      radial-gradient(70% 55% at 100% 0%, #ffe3cf 0%, transparent 60%),
+      radial-gradient(60% 50% at 0% 100%, #ffd9e4 0%, transparent 55%),
+      var(--color-light);
+  }
+
+  /* Dos filas de tres en desktop */
+  .services-section .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  /* Cards de servicios estilo glass con tintes cálidos suaves */
+  .services-section .card {
+    --tint: #FF5C8A;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--tint) 14%, transparent), rgba(255, 255, 255, 0.35)),
+      rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+      0 12px 30px -20px rgba(107, 66, 38, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+  .services-section .card:nth-child(3n+1) { --tint: #FF5C8A; } /* rosa */
+  .services-section .card:nth-child(3n+2) { --tint: #FB8C3C; } /* naranja */
+  .services-section .card:nth-child(3n+3) { --tint: #B07C4F; } /* marrón */
+  .services-section .card::before {
+    background: linear-gradient(90deg, #FB8C3C, #FF5C8A);
+  }
+  .services-section .card:hover {
+    box-shadow:
+      0 22px 40px -20px rgba(107, 66, 38, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+  .services-section .card h3 { color: #6B4226; }
+  .services-section .card p { color: #7a5f55; }
 
   .grid {
     display: grid;
@@ -128,36 +411,189 @@ import { content, images } from "../data/golosea";
     gap: 24px;
   }
   .card {
-    background: var(--color-light);
-    border-radius: 16px;
-    padding: 28px;
-    border: 1px solid #eee;
+    position: relative;
+    background: #fff;
+    border-radius: 18px;
+    padding: 30px 28px;
+    border: 1px solid rgba(232, 69, 90, 0.1);
+    box-shadow: 0 10px 26px -22px rgba(124, 30, 50, 0.6);
     transition: box-shadow 0.2s, transform 0.2s;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
   }
   .card:hover {
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    transform: translateY(-4px);
+    box-shadow: 0 20px 38px -20px rgba(124, 30, 50, 0.45);
+    transform: translateY(-5px);
   }
-  .card-emoji { font-size: 2rem; margin-bottom: 12px; }
-  .card h3 { margin-bottom: 8px; font-size: 1.15rem; color: var(--color-dark); }
-  .card p { color: #555; font-size: 0.95rem; line-height: 1.5; }
+  /* Media cuadrada de la card con hover */
+  .card-media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    margin-bottom: 16px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--tint, var(--color-primary)) 16%, #fff);
+  }
+  .card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease, filter 0.4s ease;
+  }
+  .card-media__emoji {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 3.4rem;
+  }
+  .card-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    font-size: 1.3rem;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 50%;
+    box-shadow: 0 6px 14px -8px rgba(107, 66, 38, 0.6);
+    opacity: 0;
+    transform: scale(0.6) translateY(8px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .card:hover .card-media img {
+    transform: scale(1.08);
+    filter: saturate(1.08);
+  }
+  .card:hover .card-badge { opacity: 1; transform: scale(1) translateY(0) rotate(-6deg); }
+  .card h3 { margin-bottom: 8px; font-size: 1.18rem; color: var(--color-dark); }
+  .card p { color: #6a5a5c; font-size: 0.95rem; line-height: 1.55; }
 
-  .blog-section { background: var(--color-light); }
-  .blog-card { background: #fff; }
-  .blog-tag {
+  /* ─────────────────────────  CTA FINAL  ───────────────────────── */
+  .cta-section {
+    background:
+      radial-gradient(70% 60% at 50% 0%, #ffe3cf 0%, transparent 60%),
+      var(--color-light);
+  }
+  .cta-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    padding: 64px 48px;
+    text-align: center;
+    background:
+      radial-gradient(120% 120% at 80% 0%, #ffe9b8 0%, transparent 55%),
+      radial-gradient(120% 120% at 0% 100%, #ffd0d6 0%, transparent 50%),
+      linear-gradient(180deg, #ffd9c2 0%, #ffe7d4 60%, #fff6f2 100%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+      0 30px 60px -34px rgba(107, 66, 38, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+  .cta-sky { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .cta-sky .cloud--1 { top: 8%; left: -4%; width: 150px; opacity: 0.9; }
+  .cta-sky .cloud--6 { bottom: 6%; right: -3%; width: 200px; opacity: 0.7; }
+  .cta-sky .star { color: #fff; text-shadow: 0 0 10px rgba(255, 200, 110, 0.9); }
+  .cta-sky .star--1 { top: 18%; right: 16%; font-size: 1.1rem; }
+  .cta-sky .star--3 { bottom: 22%; left: 14%; font-size: 0.9rem; }
+
+  .cta-content { position: relative; z-index: 2; }
+  .cta-eyebrow {
     display: inline-block;
-    background: var(--color-accent);
-    color: #fff;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 4px 10px;
+    background: #fff;
+    color: var(--color-primary);
+    font-weight: 800;
+    font-size: 0.82rem;
+    letter-spacing: 0.5px;
+    padding: 7px 16px;
     border-radius: 999px;
-    margin-bottom: 12px;
+    box-shadow: 0 8px 18px -10px rgba(200, 54, 74, 0.5);
+    margin-bottom: 18px;
   }
+  .cta-card h2 {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    color: #E85C3A;
+    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.5);
+    margin-bottom: 16px;
+  }
+  .cta-text {
+    max-width: 56ch;
+    margin: 0 auto 30px;
+    color: #6B4226;
+    font-size: 1.08rem;
+    line-height: 1.7;
+  }
+  .cta-ctas { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+  .cta-ctas .btn--sun  { --btn-bg: #FB8C3C; --btn-bg-dark: #EC6F1E; }
+  .cta-ctas .btn--rose { --btn-bg: #FF5C8A; --btn-bg-dark: #E63B6D; }
 
+  /* ─────────────────────────  RESPONSIVE  ───────────────────────── */
+  @media (max-width: 860px) {
+    .hero { padding: 110px 0 90px; }
+    .hero__inner { grid-template-columns: 1fr; gap: 48px; text-align: center; }
+    .hero__lead { max-width: none; margin-left: auto; margin-right: auto; }
+    .hero__ctas { justify-content: center; }
+    .hero__photo { max-width: 460px; margin: 0 auto; transform: rotate(-1deg); }
+    .services-section .grid { grid-template-columns: repeat(2, 1fr); }
+    /* Nubes algo más contenidas en tablet */
+    .cloud--6 { width: 220px; }
+    .cloud--7 { width: 190px; }
+    .cloud--8 { width: 150px; }
+  }
   @media (max-width: 760px) {
     .about-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .hero { padding: 96px 0 76px; }
+    .hero__inner { gap: 36px; }
+    .hero h1 { font-size: clamp(2rem, 8vw, 2.6rem); }
+    .hero__photo { max-width: 340px; }
+
+    /* Nubes pequeñas y repartidas por las esquinas/bordes, sin tapar el contenido */
+    .cloud--1 { top: 3%;   left: -10%; width: 120px; opacity: 0.9; }
+    .cloud--7 { top: 1%;   right: -10%; width: 120px; opacity: 0.75; }
+    .cloud--3 { top: 16%;  right: 4%;  width: 70px;  opacity: 0.7; }
+    .cloud--6 { top: 40%;  left: 30%;  width: 130px; opacity: 0.6; filter: blur(1px); }
+    .cloud--4 { top: 52%;  left: -6%;  width: 64px;  opacity: 0.6; }
+    .cloud--8 { bottom: 16%; left: -8%; width: 120px; opacity: 0.7; }
+    .cloud--2 { bottom: 2%; right: -10%; width: 120px; opacity: 0.85; }
+    .cloud--5 { display: none; }
+
+    .hero__photo figcaption {
+      white-space: normal;
+      text-align: center;
+      max-width: 90%;
+      font-size: 0.76rem;
+      line-height: 1.3;
+    }
+
+    .cta-card { padding: 48px 24px; border-radius: 22px; }
+    .cta-sky .cloud--1 { width: 100px; }
+    .cta-sky .cloud--6 { width: 130px; }
+    .cta-ctas .btn { width: 100%; }
+  }
+  @media (max-width: 540px) {
+    .services-section .grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 380px) {
+    .hero__ctas .btn { padding: 13px 22px; font-size: 0.92rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .star, .cloud { animation: none; }
+    .hero__photo { animation: none; }
   }
 </style>
