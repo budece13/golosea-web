@@ -10,11 +10,9 @@ import Layout from "../layouts/Layout.astro";
 import Marquee from "../components/Marquee.astro";
 import { content, business, images, heroSlides } from "../data/golosea";
 
-// Enlace para dejar reseña. Cuando tengáis el Place ID de Google, cambiadlo por
-// https://search.google.com/local/writereview?placeid=XXXX  (lleva directo a escribir).
-const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  `${business.name} ${business.zona}`,
-)}`;
+// Enlace que abre DIRECTO el cuadro de "escribir reseña" (no la ficha de Maps),
+// usando el Place ID del negocio.
+const reviewUrl = `https://search.google.com/local/writereview?placeid=${business.placeId}`;
 ---
 
 <Layout>
@@ -287,6 +285,86 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
   </section>
 
   <!-- ═══════════════════════════════════════════
+       NUESTRO HORARIO — reloj en tiempo real (abierto/cerrado)
+  ═══════════════════════════════════════════ -->
+  <section id="horario" class="section schedule-section">
+    <!-- nubecitas decorativas de fondo -->
+    <div class="sky-deco" aria-hidden="true">
+      <span class="sky-cloud sky-cloud--1"></span>
+      <span class="sky-cloud sky-cloud--2"></span>
+      <span class="sky-cloud sky-cloud--3"></span>
+    </div>
+
+    <div class="container">
+      <div class="section-title">
+        <span class="section-eyebrow">Horario en tiempo real</span>
+        <h2>Nuestro <span>Horario</span></h2>
+        <p class="section-sub">Mira de un vistazo si estamos abiertos ahora mismo</p>
+      </div>
+
+      <div class="schedule-grid">
+        <!-- ── Nube con el reloj analógico ── -->
+        <div class="clock-cloud">
+          <div class="cloud" data-status="loading" id="cloud">
+            <!-- forma de nube (bultos) -->
+            <span class="cloud-bump cloud-bump--a"></span>
+            <span class="cloud-bump cloud-bump--b"></span>
+            <span class="cloud-bump cloud-bump--c"></span>
+
+            <!-- reloj analógico -->
+            <div class="clock" aria-hidden="true">
+              <div class="clock-face">
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <span class="clock-tick" style={`--i:${i}`}></span>
+                ))}
+                <span class="hand hand--hour" id="handHour"></span>
+                <span class="hand hand--min" id="handMin"></span>
+                <span class="hand hand--sec" id="handSec"></span>
+                <span class="clock-pin"></span>
+              </div>
+            </div>
+
+            <!-- chapa de estado: Abierto / Cerrado -->
+            <div class="status-pill" id="statusPill">
+              <span class="status-dot"></span>
+              <span class="status-text" id="statusText">···</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Detalle del horario ── -->
+        <div class="schedule-info">
+          <p class="schedule-now" id="scheduleNow">Comprobando el horario…</p>
+
+          <ul class="schedule-rows">
+            <li class="sch-row">
+              <span class="sch-ico" aria-hidden="true">☀️</span>
+              <span class="sch-label">Mañanas</span>
+              <span class="sch-time">11:00 – 13:30</span>
+            </li>
+            <li class="sch-row">
+              <span class="sch-ico" aria-hidden="true">🌙</span>
+              <span class="sch-label">Tardes</span>
+              <span class="sch-time">17:30 – 23:00</span>
+            </li>
+          </ul>
+
+          <p class="schedule-days">
+            <strong>Martes a domingo</strong> · Los lunes descansamos
+          </p>
+
+          <div class="schedule-live">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+            </svg>
+            <span id="liveClock">--:--:--</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
        VISITAS DEL MES — registro (placeholder; se conecta al editar)
   ═══════════════════════════════════════════ -->
   <section class="visits-section">
@@ -406,6 +484,95 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
     measure();
     update();
   }
+</script>
+
+<!-- ═══════════════════════════════════════════
+     SCRIPT — horario en tiempo real (abierto / cerrado)
+═══════════════════════════════════════════ -->
+<script>
+  // Horario: martes(2) a domingo(0). Lunes(1) cerrado.
+  // Mañanas 11:00–13:30 · Tardes 17:30–23:00 (en minutos desde medianoche).
+  const OPEN_DAYS = new Set([2, 3, 4, 5, 6, 0]);
+  const INTERVALS: [number, number][] = [
+    [11 * 60, 13 * 60 + 30],
+    [17 * 60 + 30, 23 * 60],
+  ];
+  const DAY_NAMES = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+  const pad2 = (n: number) => String(n).padStart(2, '0');
+  const fmtMin = (m: number) => `${pad2(Math.floor(m / 60))}:${pad2(m % 60)}`;
+  const dayIntervals = (d: number): [number, number][] => (OPEN_DAYS.has(d) ? INTERVALS : []);
+
+  const cloud = document.getElementById('cloud');
+  const statusPill = document.getElementById('statusPill');
+  const statusText = document.getElementById('statusText');
+  const scheduleNow = document.getElementById('scheduleNow');
+  const liveClock = document.getElementById('liveClock');
+  const handHour = document.getElementById('handHour');
+  const handMin = document.getElementById('handMin');
+  const handSec = document.getElementById('handSec');
+
+  const currentStatus = (now: Date) => {
+    const day = now.getDay();
+    const mins = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
+    for (const [s, e] of dayIntervals(day)) {
+      if (mins >= s && mins < e) return { open: true, end: e };
+    }
+    return { open: false as const };
+  };
+
+  // Próxima apertura buscando en los siguientes 8 días.
+  const nextOpening = (now: Date) => {
+    const day = now.getDay();
+    const mins = now.getHours() * 60 + now.getMinutes();
+    for (let add = 0; add < 8; add++) {
+      const d = (day + add) % 7;
+      for (const [s] of dayIntervals(d)) {
+        if (add === 0 && mins >= s) continue; // ya pasó hoy
+        return { add, start: s };
+      }
+    }
+    return null;
+  };
+
+  const render = () => {
+    const now = new Date();
+
+    // ── manecillas ──
+    const s = now.getSeconds();
+    const m = now.getMinutes();
+    const h = now.getHours() % 12;
+    if (handSec) handSec.style.transform = `rotate(${s * 6}deg)`;
+    if (handMin) handMin.style.transform = `rotate(${m * 6 + s * 0.1}deg)`;
+    if (handHour) handHour.style.transform = `rotate(${h * 30 + m * 0.5}deg)`;
+
+    // ── reloj digital ──
+    if (liveClock) liveClock.textContent = `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
+
+    // ── estado abierto / cerrado ──
+    const st = currentStatus(now);
+    const status = st.open ? 'open' : 'closed';
+    cloud?.setAttribute('data-status', status);
+    statusPill?.setAttribute('data-status', status);
+    if (statusText) statusText.textContent = st.open ? 'Abierto' : 'Cerrado';
+
+    if (scheduleNow) {
+      if (st.open) {
+        scheduleNow.innerHTML = `¡Estamos abiertos! Cerramos a las <strong>${fmtMin(st.end!)}</strong>.`;
+      } else {
+        const nx = nextOpening(now);
+        if (nx) {
+          const when = nx.add === 0 ? 'hoy' : nx.add === 1 ? 'mañana' : `el ${DAY_NAMES[(now.getDay() + nx.add) % 7]}`;
+          scheduleNow.innerHTML = `Ahora cerrado. Abrimos <strong>${when}</strong> a las <strong>${fmtMin(nx.start)}</strong>.`;
+        } else {
+          scheduleNow.textContent = 'Ahora mismo estamos cerrados.';
+        }
+      }
+    }
+  };
+
+  render();
+  setInterval(render, 1000);
 </script>
 
 <!-- ═══════════════════════════════════════════
@@ -793,6 +960,8 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
     .ding:nth-child(4) { width: 120px; }
     .ding:nth-child(5) { width: 98px; }
     .hero-foot { max-width: calc(100% - 2.5rem); }
+    /* en móvil el subtexto ocupa demasiado: dejamos solo titular + CTAs */
+    .subtext { display: none; }
   }
 
   /* Desktop: titulo a la izquierda, en 3 lineas de ancho parecido */
@@ -1340,6 +1509,384 @@ const reviewUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
 
   @media (max-width: 600px) {
     .encargo-form { grid-template-columns: 1fr; padding: 22px 18px; }
+  }
+
+  /* ── NUESTRO HORARIO (reloj en tiempo real) ── */
+  .schedule-section {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    /* arranca y acaba en el mismo crema del mapa (var(--color-light)): así la
+       costura entre secciones se difumina y el cielo azul emerge solo en medio */
+    background:
+      linear-gradient(180deg,
+        var(--color-light) 0%,
+        #d3e9ff 16%,
+        #e4f2ff 56%,
+        var(--color-light) 100%);
+  }
+
+  /* nubecitas que flotan despacio de fondo */
+  .sky-deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+  .sky-cloud {
+    position: absolute;
+    background: #fff;
+    border-radius: 999px;
+    opacity: 1;
+    box-shadow:
+      0 16px 34px rgba(56, 103, 150, 0.22),
+      0 2px 5px rgba(56, 103, 150, 0.16),
+      inset 0 -7px 14px rgba(168, 198, 228, 0.55);
+  }
+  .sky-cloud::before,
+  .sky-cloud::after {
+    content: "";
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+  }
+  .sky-cloud--1 {
+    width: 120px; height: 38px; top: 16%; left: -60px;
+    animation: cloudDrift 34s linear infinite;
+  }
+  .sky-cloud--1::before { width: 52px; height: 52px; top: -22px; left: 20px; }
+  .sky-cloud--1::after  { width: 38px; height: 38px; top: -14px; left: 60px; }
+  .sky-cloud--2 {
+    width: 90px; height: 28px; top: 64%; right: -50px; left: auto;
+    animation: cloudDrift2 44s linear infinite;
+  }
+  .sky-cloud--2::before { width: 40px; height: 40px; top: -18px; left: 14px; }
+  .sky-cloud--2::after  { width: 30px; height: 30px; top: -10px; left: 46px; }
+  .sky-cloud--3 {
+    width: 70px; height: 22px; top: 36%; left: 12%;
+    opacity: 0.9;
+    animation: cloudDrift 52s linear infinite;
+  }
+  .sky-cloud--3::before { width: 30px; height: 30px; top: -14px; left: 12px; }
+  .sky-cloud--3::after  { width: 22px; height: 22px; top: -8px; left: 36px; }
+  @keyframes cloudDrift  { to { transform: translateX(118vw); } }
+  @keyframes cloudDrift2 { to { transform: translateX(-118vw); } }
+
+  .schedule-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  /* ── Nube blanca que sostiene el reloj ── */
+  .clock-cloud {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 18px 0 30px;
+  }
+  .cloud {
+    position: relative;
+    width: 270px;
+    height: 200px;
+    border-radius: 120px;
+    background: linear-gradient(180deg, #ffffff 0%, #eef5fb 100%);
+    box-shadow:
+      0 26px 50px -12px rgba(70, 110, 150, 0.32),
+      inset 0 -14px 26px rgba(176, 202, 228, 0.45),
+      inset 0 8px 14px rgba(255, 255, 255, 0.9);
+    animation: cloudFloat 6s ease-in-out infinite;
+  }
+  .cloud-bump {
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+    box-shadow: inset 0 -10px 20px rgba(176, 202, 228, 0.4);
+  }
+  .cloud-bump--a { width: 110px; height: 110px; top: -42px; left: 26px; }
+  .cloud-bump--b { width: 150px; height: 150px; top: -64px; left: 84px; }
+  .cloud-bump--c { width: 96px;  height: 96px;  top: -34px; right: 22px; }
+
+  @keyframes cloudFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-9px); }
+  }
+
+  /* ── Reloj analógico ── */
+  .clock {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 150px;
+    height: 150px;
+  }
+  .clock-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 38%, #ffffff 0%, #fff6f7 70%, #ffe9ec 100%);
+    border: 5px solid #fff;
+    box-shadow:
+      0 0 0 3px var(--color-primary),
+      0 10px 22px rgba(232, 69, 90, 0.28),
+      inset 0 3px 8px rgba(255, 255, 255, 0.9),
+      inset 0 -6px 12px rgba(232, 69, 90, 0.12);
+  }
+  /* la corona del reloj cambia de color según abierto/cerrado */
+  .cloud[data-status="open"] .clock-face {
+    box-shadow:
+      0 0 0 3px var(--color-accent),
+      0 10px 22px rgba(24, 178, 76, 0.3),
+      inset 0 3px 8px rgba(255, 255, 255, 0.9),
+      inset 0 -6px 12px rgba(24, 178, 76, 0.12);
+  }
+
+  .clock-tick {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    width: 2px;
+    height: 8px;
+    margin-left: -1px;
+    border-radius: 2px;
+    background: rgba(15, 59, 42, 0.28);
+    transform-origin: 50% 67px;
+    transform: rotate(calc(var(--i) * 30deg));
+  }
+  /* marcas de las 12, 3, 6 y 9 más marcadas */
+  .clock-tick:nth-child(3n + 1) {
+    height: 12px;
+    width: 3px;
+    margin-left: -1.5px;
+    background: var(--color-primary);
+    transform-origin: 50% 67px;
+  }
+
+  .hand {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    transform-origin: 50% 100%;
+    border-radius: 999px;
+    transition: transform 0.18s cubic-bezier(0.4, 2.2, 0.5, 1);
+  }
+  .hand--hour {
+    width: 5px;
+    margin-left: -2.5px;
+    height: 38px;
+    background: var(--color-dark);
+  }
+  .hand--min {
+    width: 4px;
+    margin-left: -2px;
+    height: 54px;
+    background: var(--color-dark);
+  }
+  .hand--sec {
+    width: 2px;
+    margin-left: -1px;
+    height: 60px;
+    background: var(--color-primary);
+    transition: none; /* el segundero salta limpio cada segundo */
+  }
+  .clock-pin {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--color-primary);
+    box-shadow: 0 0 0 3px #fff, 0 1px 4px rgba(0, 0, 0, 0.3);
+    z-index: 3;
+  }
+
+  /* ── Chapa Abierto / Cerrado ── */
+  .status-pill {
+    position: absolute;
+    z-index: 4;
+    left: 50%;
+    bottom: -16px;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: #fff;
+    font-family: var(--font-subheading);
+    font-weight: 700;
+    font-size: 0.96rem;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    color: var(--color-primary);
+    box-shadow: 0 10px 24px rgba(232, 69, 90, 0.28), inset 0 0 0 1.5px rgba(232, 69, 90, 0.25);
+    transition: color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .status-pill[data-status="open"] {
+    color: var(--color-accent-dark);
+    box-shadow: 0 10px 24px rgba(24, 178, 76, 0.3), inset 0 0 0 1.5px rgba(24, 178, 76, 0.3);
+  }
+  .status-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    box-shadow: 0 0 0 0 rgba(232, 69, 90, 0.5);
+    animation: statusPulse 2s ease-out infinite;
+  }
+  .status-pill[data-status="open"] .status-dot {
+    background: var(--color-accent);
+    box-shadow: 0 0 0 0 rgba(24, 178, 76, 0.5);
+    animation: statusPulseOpen 2s ease-out infinite;
+  }
+  @keyframes statusPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(232, 69, 90, 0.5); }
+    70%  { box-shadow: 0 0 0 9px rgba(232, 69, 90, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(232, 69, 90, 0); }
+  }
+  @keyframes statusPulseOpen {
+    0%   { box-shadow: 0 0 0 0 rgba(24, 178, 76, 0.5); }
+    70%  { box-shadow: 0 0 0 9px rgba(24, 178, 76, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(24, 178, 76, 0); }
+  }
+
+  /* ── Detalle del horario ── */
+  .schedule-info { max-width: 420px; }
+  .schedule-now {
+    font-family: var(--font-subheading);
+    font-size: clamp(1.15rem, 2.6vw, 1.45rem);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-dark);
+    margin: 0 0 22px;
+  }
+  .schedule-now strong { color: var(--color-primary); }
+
+  .schedule-rows {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .sch-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(28, 69, 50, 0.08);
+    border: 1px solid rgba(232, 69, 90, 0.08);
+    overflow: hidden;
+    cursor: default;
+    transition: transform 0.28s cubic-bezier(0.34, 1.4, 0.5, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+  }
+  /* barrita de caramelo que crece a la izquierda al pasar por encima */
+  .sch-row::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background: repeating-linear-gradient(45deg, var(--color-primary) 0 6px, #fff 6px 12px);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.28s cubic-bezier(0.34, 1.4, 0.5, 1);
+  }
+  /* destello diagonal que cruza la tarjeta */
+  .sch-row::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%);
+    transform: translateX(-120%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+  }
+  .sch-row:hover {
+    transform: translateY(-4px);
+    border-color: rgba(232, 69, 90, 0.28);
+    box-shadow: 0 16px 34px rgba(232, 69, 90, 0.18);
+  }
+  .sch-row:hover::before { transform: scaleX(1); }
+  .sch-row:hover::after { transform: translateX(120%); }
+  .sch-ico {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--color-light);
+    font-size: 1.2rem;
+    transition: transform 0.35s cubic-bezier(0.34, 1.5, 0.5, 1), background 0.28s ease;
+  }
+  .sch-row:hover .sch-ico {
+    transform: scale(1.12) rotate(-8deg);
+    background: #ffe9ec;
+  }
+  .sch-time { transition: transform 0.28s ease; }
+  .sch-row:hover .sch-time { transform: scale(1.06); }
+  .sch-label {
+    font-family: var(--font-subheading);
+    font-weight: 700;
+    color: var(--color-dark);
+  }
+  .sch-time {
+    margin-left: auto;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-primary);
+    font-size: 1.05rem;
+  }
+
+  .schedule-days {
+    margin: 0 0 18px;
+    color: #6b635f;
+    font-size: 0.98rem;
+  }
+  .schedule-days strong { color: var(--color-dark); }
+
+  .schedule-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: var(--color-dark);
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 1.02rem;
+  }
+  .schedule-live svg { width: 17px; height: 17px; color: var(--color-accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cloud, .sky-cloud, .status-dot, .status-pill[data-status="open"] .status-dot { animation: none; }
+  }
+
+  @media (max-width: 760px) {
+    .schedule-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+      justify-items: center;
+      text-align: center;
+    }
+    .clock-cloud { padding-top: 30px; }
+    .schedule-info { max-width: 460px; }
+    .schedule-now { text-align: center; }
+    .sch-time { font-size: 1rem; }
   }
 
   /* ── VISITAS DEL MES ── */

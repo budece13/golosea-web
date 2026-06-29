@@ -8,6 +8,7 @@ const links = [
   { href: "/#galeria", label: "Galería" },
   { href: "/#resenas", label: "Reseñas" },
   { href: "/#mapa", label: "Encuéntranos" },
+  { href: "/#horario", label: "Horario", icon: "clock" },
   { href: "/sobre-golosea", label: "Sobre Golosea" },
   { href: "/festivos", label: "Festivos" },
 ];
@@ -21,7 +22,14 @@ const links = [
 
     <nav class="nav-links" id="navMenu" aria-label="Principal">
       {links.map((l) => (
-        <a href={l.href} class:list={["nav-link", { active: l.href === path }]}>{l.label}</a>
+        <a href={l.href} class:list={["nav-link", { active: l.href === path }]}>
+          {(l as any).icon === "clock" && (
+            <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+            </svg>
+          )}
+          {l.label}
+        </a>
       ))}
       <a href="/#encargos" class="btn btn--primary nav-cta-mob">{content.cta_text}</a>
       <span class="nav-indicator" aria-hidden="true"></span>
@@ -99,6 +107,9 @@ const links = [
   }
   .nav-link {
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     font-weight: 600;
     font-size: 0.94rem;
     color: #3b4a42;
@@ -107,6 +118,19 @@ const links = [
   }
   .nav-link:hover,
   .nav-link.active { color: var(--color-primary); }
+  .nav-ico {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+  /* El relojito del nav gira con pasos de tic-tac al pasar por encima */
+  .nav-link:hover .nav-ico { animation: navClockTick 2s steps(12) infinite; }
+  @keyframes navClockTick {
+    to { transform: rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-link:hover .nav-ico { animation: none; }
+  }
 
   /* ── Palito de caramelo deslizante ── */
   .nav-indicator {
