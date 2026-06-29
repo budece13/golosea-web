@@ -7,6 +7,9 @@ export const business = {
   whatsapp: "34662595342",
   mapsEmbed:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4476.481698437953!2d-2.5391421!3d38.9506644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd68a150a580ab63%3A0x88e0f2d1ab353cec!2sGolosea!5e1!3m2!1ses!2ses!4v1782271968647!5m2!1ses!2ses",
+  // Place ID de Google (derivado del feature id 0xd68a150a580ab63:0x88e0f2d1ab353cec).
+  // Se usa para el enlace que abre directo el cuadro de "escribir reseña".
+  placeId: "ChIJY6uApVChaA0R7Dw1q9Hy4Ig",
   rating: 4.9,
   ratingsCount: 87,
 } as const;
