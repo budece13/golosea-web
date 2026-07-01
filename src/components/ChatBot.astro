@@ -35,8 +35,8 @@ import { business } from "../data/golosea";
 <style>
   .chat-btn {
     position: fixed;
-    bottom: 22px;
-    right: 22px;
+    bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+    right: calc(22px + env(safe-area-inset-right, 0px));
     width: 58px;
     height: 58px;
     border-radius: 50%;
@@ -57,8 +57,8 @@ import { business } from "../data/golosea";
   /* CTA flotante que apunta a la burbuja del chat */
   .chat-cta {
     position: fixed;
-    bottom: 30px;
-    right: 92px;
+    bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+    right: calc(92px + env(safe-area-inset-right, 0px));
     z-index: 60;
     max-width: 230px;
     border-radius: 16px 16px 4px 16px;
@@ -148,12 +148,14 @@ import { business } from "../data/golosea";
 
   .chat-panel {
     position: fixed;
-    bottom: 90px;
-    right: 22px;
+    bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+    right: calc(22px + env(safe-area-inset-right, 0px));
     width: 340px;
     max-width: calc(100vw - 44px);
     height: 460px;
+    /* dvh sigue el viewport real de iOS (barra de URL) mejor que vh */
     max-height: 70vh;
+    max-height: 70dvh;
     background: #fff;
     border-radius: 16px;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
@@ -193,6 +195,9 @@ import { business } from "../data/golosea";
   .chat-body {
     flex: 1;
     overflow-y: auto;
+    /* iOS: inercia al desplazar y que el rebote no arrastre la página de fondo */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     padding: 16px 14px;
     display: flex;
     flex-direction: column;
@@ -257,9 +262,10 @@ import { business } from "../data/golosea";
 
   .chat-input input {
     flex: 1;
+    min-width: 0;              /* deja que encoja: sin esto empuja al botón fuera */
     border: none;
     padding: 13px;
-    font-size: 0.95rem;
+    font-size: 16px;           /* >=16px evita que iOS haga zoom al enfocar */
     outline: none;
     font-family: var(--font-body);
   }

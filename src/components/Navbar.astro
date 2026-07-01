@@ -216,6 +216,12 @@ const links = [
       gap: 0;
       background: #fff;
       padding: 10px 0 16px;
+      /* en iPhone pequeño / horizontal el menú puede pasar del alto de pantalla:
+         lo limitamos y dejamos que haga scroll interno con inercia iOS */
+      max-height: calc(100svh - 90px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
       border-bottom: 1px solid rgba(15, 59, 42, 0.08);
       box-shadow: 0 14px 26px rgba(15, 59, 42, 0.1);
       clip-path: inset(0 0 100% 0);

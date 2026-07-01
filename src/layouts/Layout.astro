@@ -28,7 +28,7 @@ const googleFontsUrl =
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
 
     <title>{title}</title>
@@ -84,6 +84,9 @@ const googleFontsUrl =
 
   html {
     scroll-behavior: smooth;
+    /* iOS Safari: evita que rote/aumente el texto al girar el móvil */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
@@ -92,6 +95,10 @@ const googleFontsUrl =
     color: var(--color-dark);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    /* iOS Safari: cualquier desborde puntual no debe crear scroll horizontal */
+    overflow-x: hidden;
+    /* quita el flash gris al tocar enlaces/botones en iOS */
+    -webkit-tap-highlight-color: transparent;
   }
 </style>
 

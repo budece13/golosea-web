@@ -430,8 +430,12 @@ const reviewUrl = `https://search.google.com/local/writereview?placeid=${busines
   const bg = document.querySelector<HTMLElement>('.encargos-bg');
   const sec = document.getElementById('encargos');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Táctil (iOS/Android): desactivamos el ascensor por JS. Safari móvil difiere los
+  // eventos scroll durante la inercia y varía innerHeight con la barra de URL, lo que
+  // hacía saltar el fondo. El CSS lo deja anclado estático en estos dispositivos.
+  const coarse = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
-  if (bg && sec && !reduce) {
+  if (bg && sec && !reduce && !coarse) {
     let secH = 0;
 
     const measure = () => {
@@ -930,7 +934,8 @@ const reviewUrl = `https://search.google.com/local/writereview?placeid=${busines
     position: absolute;
     z-index: 5;
     left: clamp(1.25rem, 5vw, 5rem);
-    bottom: clamp(1.5rem, 5vh, 3.4rem);
+    /* + área segura de iOS: en iPhone con notch/indicador los CTAs no quedan tapados */
+    bottom: calc(clamp(1.5rem, 5vh, 3.4rem) + env(safe-area-inset-bottom, 0px));
     max-width: 440px;
   }
 
@@ -1332,6 +1337,13 @@ const reviewUrl = `https://search.google.com/local/writereview?placeid=${busines
   @media (prefers-reduced-motion: reduce) {
     .encargos-bg { position: absolute; inset: 0; height: auto; transform: none; }
   }
+  /* iOS/táctil: el efecto "ascensor" depende de eventos scroll continuos y de un
+     innerHeight estable. Safari móvil difiere los eventos durante el scroll con
+     inercia y cambia la altura al colapsar la barra de URL -> el fondo salta y se
+     desincroniza. En estos dispositivos lo anclamos estático (sin JS). */
+  @media (hover: none) and (pointer: coarse) {
+    .encargos-bg { position: absolute; inset: 0; height: auto; transform: none; }
+  }
 
   /* Placa de cristal esmerilado: difumina el fondo y hace el texto nítido */
   .encargos-head {
@@ -1445,7 +1457,9 @@ const reviewUrl = `https://search.google.com/local/writereview?placeid=${busines
     border-radius: 25px;
     padding: 30px 28px 32px;
   }
-  .ef-field { display: flex; flex-direction: column; gap: 8px; }
+  /* min-width:0 -> permite que la celda encoja. Sin esto, los inputs date/time/number
+     nativos de iOS imponen su ancho intrínseco y desbordan el grid (rompen la tarjeta). */
+  .ef-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
   .ef-full { grid-column: 1 / -1; }
 
   .ef-field label {
@@ -1463,16 +1477,34 @@ const reviewUrl = `https://search.google.com/local/writereview?placeid=${busines
   .ef-field input,
   .ef-field textarea {
     width: 100%;
+    min-width: 0;              /* iOS: los inputs date/time no deben empujar el ancho */
     padding: 13px 15px;
     border: 1.6px solid #f0e0e1;
     border-radius: 14px;
     font-family: var(--font-body);
-    font-size: 1rem;
+    font-size: 1rem;          /* >=16px evita el auto-zoom de Safari al enfocar */
     font-weight: 500;
     color: var(--color-dark);
     background: #fff8f8;
     outline: none;
+    /* iOS pinta date/time/number con estilos propios (alturas y fondos distintos):
+       los normalizamos para que casen con los inputs de texto. */
+    -webkit-appearance: none;
+    appearance: none;
     transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+  }
+  /* iOS alinea date/time a la altura del contenido y los deja más bajos: fijamos
+     una altura mínima para que todos los campos midan igual. */
+  .ef-field input[type="date"],
+  .ef-field input[type="time"] {
+    min-height: 48px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  /* el texto del picker en iOS se centra vertical raro -> lo anclamos a la izquierda */
+  .ef-field input[type="date"]::-webkit-date-and-time-value,
+  .ef-field input[type="time"]::-webkit-date-and-time-value {
+    text-align: left;
   }
   .ef-field input::placeholder,
   .ef-field textarea::placeholder { color: #c8bdbc; font-weight: 400; }
